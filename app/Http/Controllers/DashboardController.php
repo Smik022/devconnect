@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
+    
     public function index()
     {
         $user = Auth::user();
@@ -16,7 +17,7 @@ class DashboardController extends Controller
         if (!$user) {
             return redirect()->route('login');
         }
-
+        #checks if github link or username then extracts username
         if ($user->role === 'Developer' && $user->github) {
             $username = $this->extractGithubUsername($user->github);
 

@@ -11,8 +11,8 @@
 
     <hr>
 
-    <h2>GitHub Profile</h2>
-
+    <h2>GitHub Profile Details</h2>
+    <!-- Checks if there is a authentic github profile -->
     @if ($githubData)
         <img src="{{ $githubData['avatar_url'] }}" alt="Avatar" width="120" height="120" style="border-radius:50%;">
         <p><strong>Username:</strong> {{ $githubData['login'] }}</p>
