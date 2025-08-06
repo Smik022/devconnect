@@ -1,58 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Developer Dashboard - DevConnect</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Developer Dashboard</h1>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="text-center mb-4">
+            <h1 class="text-primary">Developer Dashboard</h1>
+            <p>Welcome, <strong>{{ $user->name }}</strong>!</p>
+            <p class="text-muted">Your role: {{ $user->role }}</p>
+        </div>
 
-    <p>Welcome, {{ $user->name }}!</p>
-    <p>Your role: {{ $user->role }}</p>
+        <hr>
 
-    <hr>
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-dark text-white">
+                <h4 class="mb-0">GitHub Profile Details</h4>
+            </div>
+            <div class="card-body">
+                @if ($githubData)
+                    <div class="text-center mb-3">
+                        <img src="{{ $githubData['avatar_url'] }}" alt="Avatar" class="rounded-circle" width="120" height="120">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Username:</strong> {{ $githubData['login'] }}</p>
+                            <p><strong>Name:</strong> {{ $githubData['name'] ?? 'N/A' }}</p>
+                            <p><strong>Bio:</strong> {{ $githubData['bio'] ?? 'N/A' }}</p>
+                            <p><strong>Company:</strong> {{ $githubData['company'] ?? 'N/A' }}</p>
+                            <p><strong>Location:</strong> {{ $githubData['location'] ?? 'N/A' }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Blog:</strong>
+                                @if ($githubData['blog'])
+                                    <a href="{{ $githubData['blog'] }}" target="_blank">{{ $githubData['blog'] }}</a>
+                                @else
+                                    N/A
+                                @endif
+                            </p>
+                            <p><strong>Twitter:</strong>
+                                @if ($githubData['twitter_username'])
+                                    <a href="https://twitter.com/{{ $githubData['twitter_username'] }}" target="_blank">
+                                        @{{ $githubData['twitter_username'] }}
+                                    </a>
+                                @else
+                                    N/A
+                                @endif
+                            </p>
+                            <p><strong>Public Repos:</strong> {{ $githubData['public_repos'] }}</p>
+                            <p><strong>Followers:</strong> {{ $githubData['followers'] }}</p>
+                            <p><strong>Following:</strong> {{ $githubData['following'] }}</p>
+                            <p><strong>Joined GitHub:</strong> {{ date('F j, Y', strtotime($githubData['created_at'])) }}</p>
+                        </div>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="{{ $githubData['html_url'] }}" class="btn btn-outline-primary" target="_blank">
+                            View GitHub Profile
+                        </a>
+                    </div>
+                @else
+                    <div class="alert alert-danger text-center">
+                        Please update your GitHub link in
+                        <a href="{{ route('developer.profile.edit') }}" class="alert-link">Edit Profile</a>
+                        to fetch your GitHub data.
+                    </div>
+                @endif
+            </div>
+        </div>
 
-    <h2>GitHub Profile Details</h2>
-    <!-- Checks if there is a authentic github profile -->
-    @if ($githubData)
-        <img src="{{ $githubData['avatar_url'] }}" alt="Avatar" width="120" height="120" style="border-radius:50%;">
-        <p><strong>Username:</strong> {{ $githubData['login'] }}</p>
-        <p><strong>Name:</strong> {{ $githubData['name'] ?? 'N/A' }}</p>
-        <p><strong>Bio:</strong> {{ $githubData['bio'] ?? 'N/A' }}</p>
-        <p><strong>Company:</strong> {{ $githubData['company'] ?? 'N/A' }}</p>
-        <p><strong>Location:</strong> {{ $githubData['location'] ?? 'N/A' }}</p>
-        <p><strong>Blog:</strong>
-            @if ($githubData['blog'])
-                <a href="{{ $githubData['blog'] }}" target="_blank">{{ $githubData['blog'] }}</a>
-            @else
-                N/A
-            @endif
-        </p>
-        <p><strong>Twitter:</strong>
-            @if ($githubData['twitter_username'])
-                <a href="https://twitter.com/{{ $githubData['twitter_username'] }}" target="_blank">@{{ $githubData['twitter_username'] }}</a>
-            @else
-                N/A
-            @endif
-        </p>
-        <p><strong>Public Repos:</strong> {{ $githubData['public_repos'] }}</p>
-        <p><strong>Followers:</strong> {{ $githubData['followers'] }}</p>
-        <p><strong>Following:</strong> {{ $githubData['following'] }}</p>
-        <p><strong>Account Created:</strong> {{ date('F j, Y', strtotime($githubData['created_at'])) }}</p>
-        <p><a href="{{ $githubData['html_url'] }}" target="_blank">View GitHub Profile</a></p>
-    @else
-        <p style="color: red;">
-            Please update your GitHub link in
-            <a href="{{ route('developer.profile.edit') }}">Edit Profile</a> to fetch your GitHub data.
-        </p>
-    @endif
+        <div class="d-flex justify-content-between">
+            <a href="{{ route('developer.profile.edit') }}" class="btn btn-secondary">✏️ Edit Profile</a>
+            <a href="{{ route('home') }}" class="btn btn-outline-dark">🏠 Go to Home</a>
 
-    <br><br>
-    <a href="{{ route('developer.profile.edit') }}">✏️ Edit Profile</a><br>
-    <a href="{{ route('home') }}">🏠 Go to Home</a>
-
-    <form method="POST" action="{{ route('logout') }}">
-        @csrf
-        <button type="submit">Logout</button>
-    </form>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="btn btn-danger">Logout</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
