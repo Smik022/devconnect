@@ -11,6 +11,8 @@ use App\Http\Controllers\JobPostController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminPanelController;
 use App\Http\Controllers\PendingApprovalController;
+use App\Http\Controllers\DeveloperController;
+
 
 // Home Page
 Route::get('/', function () {
@@ -85,3 +87,6 @@ Route::middleware('auth:admin')->group(function () {
 Route::middleware('auth:admin')->group(function () {
     Route::post('/admin/approvals/{id}/approve', [JobPostController::class, 'approve']);
 });
+
+#developer directory search
+Route::get('/developers', [DeveloperController::class, 'index'])->name('developers.index');
