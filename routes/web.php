@@ -8,6 +8,9 @@ use App\Http\Controllers\DeveloperProfileController;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\JobPostController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminPanelController;
+use App\Http\Controllers\PendingApprovalController;
 
 // Home Page
 Route::get('/', function () {
@@ -53,3 +56,32 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/jobposts', [JobPostController::class, 'index'])->name('jobposts.index');
+
+//APURBO
+Route::get('/admin/login', [AuthController::class, 'showLoginForm'])->name('admin_login');
+Route::post('/admin/login', [AuthController::class, 'login'])->name('login.post');
+
+Route::post('/admin/logout', [AuthController::class, 'logout'])->name('admin_logout');
+
+Route::get('/admin/dashboard', [AdminPanelController::class, 'index'])
+    ->middleware('auth:admin')
+    ->name('admin_dashboard');
+
+Route::get('/search', [AdminPanelController::class, 'search'])->middleware('auth:admin')->name('search');
+
+Route::get('/admin/profile', [AdminPanelController::class, 'profile'])
+    ->middleware('auth:admin')
+    ->name('admin_profile');
+
+Route::middleware('auth:admin')->group(function () {
+    Route::post('/admin/profile/update', [AdminPanelController::class, 'updateProfile'])->name('admin.profile.update');
+});
+
+Route::middleware('auth:admin')->group(function () {
+    Route::get('/admin/pending_approvals', [PendingApprovalController::class, 'index'])->name('pending_approvals');
+    Route::delete('/admin/pending_approvals/{pendingApproval}', [PendingApprovalController::class, 'destroy'])->name('pending_approvals.destroy');
+});
+
+Route::middleware('auth:admin')->group(function () {
+    Route::post('/admin/approvals/{id}/approve', [JobPostController::class, 'approve']);
+});

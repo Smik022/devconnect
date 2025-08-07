@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\JobPost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\PendingApproval;
 
 class JobPostController extends Controller
 {
@@ -49,7 +50,7 @@ class JobPostController extends Controller
             'company_name' => 'required',
         ]);
 
-        JobPost::create([
+        PendingApproval::create([
             'user_id' => Auth::id(),
             'title' => $request->title,
             'description' => $request->description,
@@ -60,6 +61,28 @@ class JobPostController extends Controller
             'company_name' => $request->company_name,
         ]);
 
-        return redirect()->route('jobposts.index')->with('success', 'Job posted successfully!');
+        return redirect()->route('jobposts.index')->with('success', 'Job submitted for approval!');
+    }   
+    
+    
+    public function approve($id)
+    {
+        $pending = PendingApproval::findOrFail($id);
+
+        JobPost::create([
+            'user_id'      => $pending->user_id,       
+            'title'        => $pending->title,
+            'description'  => $pending->description,
+            'category'     => $pending->category,
+            'salary'       => $pending->salary,
+            'job_type'     => $pending->job_type,
+            'location'     => $pending->location,
+            'company_name' => $pending->company_name,
+        ]);
+
+        $pending->delete();
+
+        return response()->json(['message' => 'Job posting approved successfully.']);
     }
+
 }
