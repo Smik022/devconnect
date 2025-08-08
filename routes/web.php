@@ -12,6 +12,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminPanelController;
 use App\Http\Controllers\PendingApprovalController;
 use App\Http\Controllers\DeveloperController;
+use App\Http\Controllers\EmployerSearchController;
 
 
 // Home Page
@@ -90,3 +91,6 @@ Route::middleware('auth:admin')->group(function () {
 
 #developer directory search
 Route::get('/developers', [DeveloperController::class, 'index'])->name('developers.index');
+
+#employers search
+Route::get('/employers/search', [EmployerSearchController::class, 'search'])->name('employers.search');

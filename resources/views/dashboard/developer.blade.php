@@ -70,6 +70,13 @@
             </div>
         </div>
 
+        <div class="d-flex justify-content-center mb-4 gap-3">
+            <a href="{{ route('employers.search') }}" class="btn btn-outline-primary btn-lg rounded-pil>
+                <i class="bi bi-search"></i> Explore Employer Directory! 🔍
+            </a>
+        </div>
+
+
         <div class="d-flex justify-content-between">
             <a href="{{ route('developer.profile.edit') }}" class="btn btn-secondary">✏️ Edit Profile</a>
             <a href="{{ route('home') }}" class="btn btn-outline-dark">🏠 Go to Home</a>
