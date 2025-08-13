@@ -27,6 +27,13 @@
 
         <div class="mt-4">
             <a href="{{ route('jobposts.create') }}" class="btn btn-success me-2 mb-2">➕ Create a Job Post</a>
+            <a href="{{ route('jobposts.index') }}" class="btn btn-info me-2 mb-2">📋 View All Job Posts</a>
+            <a href="{{ route('employer.applications') }}" class="btn btn-warning me-2 mb-2">
+                <i class="fas fa-clipboard-list me-2"></i>Job Applications
+                @if(isset($jobCount) && $jobCount > 0)
+                    <span class="badge bg-light text-dark ms-1">{{ $jobCount }}</span>
+                @endif
+            </a>
         </div>
     </div>
 

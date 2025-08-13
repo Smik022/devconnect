@@ -71,8 +71,17 @@
         </div>
 
         <div class="d-flex justify-content-center mb-4 gap-3">
-            <a href="{{ route('employers.search') }}" class="btn btn-outline-primary btn-lg rounded-pil>
+            <a href="{{ route('employers.search') }}" class="btn btn-outline-primary btn-lg rounded-pill me-2">
                 <i class="bi bi-search"></i> Explore Employer Directory! 🔍
+            </a>
+            <a href="{{ route('jobposts.index') }}" class="btn btn-outline-success btn-lg rounded-pill me-2">
+                <i class="fas fa-briefcase"></i> Browse Jobs 🔍
+            </a>
+            <a href="{{ route('wishlist.index') }}" class="btn btn-outline-danger btn-lg rounded-pill">
+                <i class="fas fa-heart"></i> My Wishlist 
+                @if(isset($wishlistCount) && $wishlistCount > 0)
+                    <span class="badge bg-danger ms-1">{{ $wishlistCount }}</span>
+                @endif
             </a>
         </div>
 

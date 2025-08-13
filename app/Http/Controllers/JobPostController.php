@@ -11,8 +11,24 @@ class JobPostController extends Controller
 {
     public function index()
     {
-        $jobs = JobPost::latest()->paginate(10);
+        $jobs = JobPost::with(['user', 'wishlists'])->latest()->paginate(10);
         return view('jobposts.index', compact('jobs'));
+    }
+
+    public function show($id)
+    {
+        $job = JobPost::with('user')->findOrFail($id);
+        $user = auth()->user();
+        
+        if ($user) {
+            $hasApplied = $job->applications()->where('user_id', $user->id)->exists();
+            $isWishlisted = $user->wishlists()->where('job_post_id', $id)->exists();
+        } else {
+            $hasApplied = false;
+            $isWishlisted = false;
+        }
+        
+        return view('jobposts.show', compact('job', 'hasApplied', 'isWishlisted'));
     }
 
     public function create()

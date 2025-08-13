@@ -24,4 +24,14 @@ class JobPost extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function applications()
+    {
+        return $this->hasMany(JobApplication::class);
+    }
+
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
 }

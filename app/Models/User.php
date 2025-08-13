@@ -25,4 +25,19 @@ protected $fillable = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function jobPosts()
+    {
+        return $this->hasMany(JobPost::class);
+    }
+
+    public function applications()
+    {
+        return $this->hasMany(JobApplication::class);
+    }
+
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
 }

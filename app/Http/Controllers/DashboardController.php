@@ -37,9 +37,11 @@ class DashboardController extends Controller
         }
 
         if ($user->role === 'Developer') {
-            return view('dashboard.developer', compact('user', 'githubData'));
+            $wishlistCount = $user->wishlists()->count();
+            return view('dashboard.developer', compact('user', 'githubData', 'wishlistCount'));
         } elseif ($user->role === 'Employer') {
-            return view('dashboard.employer', compact('user'));
+            $jobCount = $user->jobPosts()->count();
+            return view('dashboard.employer', compact('user', 'jobCount'));
         }
 
         abort(403);

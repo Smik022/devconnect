@@ -14,6 +14,8 @@ use App\Http\Controllers\PendingApprovalController;
 use App\Http\Controllers\DeveloperController;
 use App\Http\Controllers\EmployerSearchController;
 use App\Http\Controllers\EmployerController;
+use App\Http\Controllers\JobApplicationController;
+use App\Http\Controllers\WishlistController;
 
 // Home Page
 Route::get('/', function () {
@@ -59,6 +61,22 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/jobposts', [JobPostController::class, 'index'])->name('jobposts.index');
+Route::get('/job/{id}', [JobPostController::class, 'show'])->name('jobposts.show');
+
+// Job Applications
+Route::middleware(['auth'])->group(function () {
+    Route::get('/job/{id}/apply', [JobApplicationController::class, 'apply'])->name('jobposts.apply');
+    Route::post('/job/{id}/apply', [JobApplicationController::class, 'store'])->name('jobposts.apply.store');
+    Route::get('/employer/applications', [JobApplicationController::class, 'employerApplications'])->name('employer.applications');
+    Route::put('/application/{id}/status', [JobApplicationController::class, 'updateStatus'])->name('application.status.update');
+});
+
+// Wishlist
+Route::middleware(['auth'])->group(function () {
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/wishlist/{jobId}/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+    Route::get('/wishlist/{jobId}/check', [WishlistController::class, 'check'])->name('wishlist.check');
+});
 
 
 #developer directory search
