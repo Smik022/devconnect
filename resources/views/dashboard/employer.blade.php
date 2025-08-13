@@ -27,7 +27,6 @@
 
         <div class="mt-4">
             <a href="{{ route('jobposts.create') }}" class="btn btn-success me-2 mb-2">➕ Create a Job Post</a>
-            <a href="{{ route('jobposts.index') }}" class="btn btn-info mb-2">📃 View All Job Posts</a>
         </div>
     </div>
 
