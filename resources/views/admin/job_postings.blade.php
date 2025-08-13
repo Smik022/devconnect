@@ -6,7 +6,6 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <style>
-    
     body {
         background-color: #f8f9fa; 
     }
@@ -203,17 +202,7 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-    }   
-    .modal-body {
-        max-height: 400px;
-        overflow-y: auto;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-    .modal-body::-webkit-scrollbar {
-        display: none;
-    }
-
+    }    
 </style>
 
 <div class="container py-4">
@@ -366,7 +355,7 @@
 </div>
 
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-centered">
         <form method="POST" id="editForm" class="modal-content border-warning" novalidate>
             @csrf
             @method('PUT')
@@ -378,7 +367,7 @@
 
             <div class="modal-body">
                 <div class="mb-3">
-                    <label for="edit-title" class="form-label">Title</label>
+                    <label for="edit-title" class="form-label">Job Title</label>
                     <input
                     type="text"
                     name="title"
@@ -554,15 +543,16 @@
                 });
         }
 
-        function toggleError(inputElem, errorElem, show, columnName = '') {
-            if (show) {
-                columnName = columnName.replace(/ is required\.?$/i, '').trim().toLowerCase();;
-                const message = `The ${columnName} field is required`;
+        function capitalizeWords(str) {
+            return str.replace(/\b\w/g, char => char.toUpperCase());
+        }
 
+        function toggleError(inputElem, errorElem, show, message = '') {
+            if (show) {
                 inputElem.classList.add('is-invalid');
                 if (errorElem) {
-                errorElem.style.display = 'block';
-                errorElem.textContent = message;
+                    errorElem.style.display = 'block';
+                    errorElem.textContent = capitalizeWords(message);
                 }
             } else {
                 inputElem.classList.remove('is-invalid');
@@ -572,8 +562,6 @@
                 }
             }
         }
-
-
 
 
         const editModal = document.getElementById('editModal');

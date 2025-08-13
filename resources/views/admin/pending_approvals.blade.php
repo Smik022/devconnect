@@ -266,15 +266,6 @@
         border-radius: 0 !important;
         white-space: normal !important; 
     }
-    .modal-body {
-        max-height: 400px;
-        overflow-y: auto;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-    .modal-body::-webkit-scrollbar {
-        display: none;
-    }
 </style>
 
 <div class="container py-4">
@@ -328,7 +319,7 @@
                 @forelse($pendingApprovals as $approval)
                 <tr>
                     <td>{{ $approval->title }}</td>
-                    <td>{{ Str::limit($approval->description, 20) }}</td>
+                    <td>{{ Str::limit($approval->description, 50) }}</td>
                     <td>{{ $approval->category }}</td>
                     <td>{{ $approval->salary }}</td>
                     <td>{{ $approval->job_type }}</td>
@@ -379,7 +370,7 @@
 </div>
 
 <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-info">
             <div class="modal-header bg-info text-white">
                 <h5 class="modal-title" id="viewModalLabel">Pending Approval Details</h5>
