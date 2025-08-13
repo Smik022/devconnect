@@ -647,9 +647,6 @@
                         showSwalFlash('success', 'Success', 'Job posting updated successfully!');
                         const modalInstance = bootstrap.Modal.getInstance(editModal);
                         modalInstance.hide();
-                        setTimeout(() => {
-                            location.reload();
-                        }, 1500);
                     } else {
                         showSwalFlash('error', 'Error', data.message || 'Failed to update job posting.');
                     }
