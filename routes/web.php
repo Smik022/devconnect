@@ -60,6 +60,16 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/jobposts', [JobPostController::class, 'index'])->name('jobposts.index');
 
+
+#developer directory search
+Route::get('/developers', [DeveloperController::class, 'index'])->name('developers.index');
+
+#employers search
+Route::get('/employers/search', [EmployerSearchController::class, 'search'])->name('employers.search');
+
+
+
+
 //APURBO
 Route::get('/admin/login', [AuthController::class, 'showLoginForm'])->name('admin_login');
 Route::post('/admin/login', [AuthController::class, 'login'])->name('login.post');
@@ -85,12 +95,17 @@ Route::middleware('auth:admin')->group(function () {
     Route::delete('/admin/pending_approvals/{pendingApproval}', [PendingApprovalController::class, 'destroy'])->name('pending_approvals.destroy');
 });
 
+
 Route::middleware('auth:admin')->group(function () {
-    Route::post('/admin/approvals/{id}/approve', [JobPostController::class, 'approve']);
+    Route::post('/admin/approvals/{id}/approve', [JobPostController::class, 'approve']);    
+    Route::get('/admin/job_postings', [JobPostController::class, 'job_index'])->name('job_postings');
+    Route::get('/admin/job_postings/{job_posting}', [JobPostController::class, 'show'])->name('job_postings.show');
+    Route::put('/admin/job_postings/{job_posting}', [JobPostController::class, 'update'])->name('job_postings.update');
+    Route::delete('/admin/job_postings/{job_posting}', [JobPostController::class, 'destroy'])->name('job_postings.destroy');
 });
 
-#developer directory search
-Route::get('/developers', [DeveloperController::class, 'index'])->name('developers.index');
 
-#employers search
-Route::get('/employers/search', [EmployerSearchController::class, 'search'])->name('employers.search');
+
+
+
+

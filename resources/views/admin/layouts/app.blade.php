@@ -378,7 +378,7 @@
                 <a href="#" class="{{ request()->routeIs('employers') ? 'active' : '' }}">
                     <i class="bi bi-building"></i> Employers
                 </a>
-                <a href="#" class="{{ request()->routeIs('job_postings') ? 'active' : '' }}">
+                <a href="{{ route('job_postings') }}" class="{{ request()->routeIs('job_postings') ? 'active' : '' }}">
                     <i class="bi bi-briefcase"></i> Postings
                 </a>
                 <a href="{{ route('pending_approvals') }}" class="{{ request()->routeIs('pending_approvals') ? 'active' : '' }}">

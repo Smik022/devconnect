@@ -64,7 +64,7 @@ class JobPostController extends Controller
         return redirect()->route('jobposts.index')->with('success', 'Job submitted for approval!');
     }   
     
-    
+    //APURBO
     public function approve($id)
     {
         $pending = PendingApproval::findOrFail($id);
@@ -83,6 +83,69 @@ class JobPostController extends Controller
         $pending->delete();
 
         return response()->json(['message' => 'Job posting approved successfully.']);
+    }    
+    
+    public function job_index(Request $request)
+    {
+        $query = JobPost::query();
+
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%");
+            });
+        }
+
+        $validSorts = ['title', 'description', 'category', 'salary', 'job_type', 'location', 'company_name', 'created_at'];
+        $sort = $request->input('sort', 'title');
+        $sort = in_array($sort, $validSorts) ? $sort : 'title';
+
+        $direction = $request->input('direction', 'asc');
+        $direction = in_array(strtolower($direction), ['asc', 'desc']) ? $direction : 'asc';
+
+        $job_posts = $query->orderBy($sort, $direction)
+        ->paginate(50)
+        ->appends($request->only(['search', 'sort', 'direction']));
+
+        return view('/admin/job_postings', compact('job_posts'));
     }
 
+    public function update(Request $request, JobPost $job_posting)
+    {
+        $validated = $request->validate([
+            'title'        => 'required|string|max:255',
+            'description'  => 'required|string',
+            'category'     => 'required|string|max:255',
+            'salary'       => 'required|numeric',
+            'job_type'     => 'required|string|max:255',
+            'location'     => 'required|string|max:255',
+            'company_name' => 'required|string|max:255',
+        ], [
+            'title.required'        => 'Title required.',
+            'description.required'  => 'Description required.',
+            'category.required'     => 'Category required.',
+            'salary.required'       => 'Salary required.',
+            'job_type.required'     => 'Job type required.',
+            'location.required'     => 'Location required.',
+            'company_name.required' => 'Company name required.',
+        ]);
+
+        $job_posting->update($validated);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Job posting updated successfully.',
+            ]);
+        }
+
+        return redirect()
+        ->route('job_postings')
+        ->with('success', 'Job posting updated successfully.');
+    }
+
+    public function destroy(JobPost $job_posting)
+    {
+        $job_posting->delete();
+        return response()->json(['message' => 'Job posting deleted successfully']);
+    }
 }

@@ -26,13 +26,7 @@ class PendingApprovalController extends Controller
 
         if ($search = $request->input('search')) {
             $query->where(function($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%")
-                  ->orWhere('category', 'like', "%{$search}%")
-                  ->orWhere('job_type', 'like', "%{$search}%")
-                  ->orWhere('location', 'like', "%{$search}%")
-                  ->orWhere('company_name', 'like', "%{$search}%")
-                  ->orWhere('salary', 'like', "%{$search}%");                  
+                $q->where('title', 'like', "%{$search}%");                
             });
         }
 
