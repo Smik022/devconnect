@@ -72,6 +72,15 @@
         background-color: #563d7c;
         color: #fff;
     }
+    .modal-body {
+        max-height: 400px;
+        overflow-y: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    .modal-body::-webkit-scrollbar {
+        display: none;
+    }
 </style>
 
 <div class="container mt-5">

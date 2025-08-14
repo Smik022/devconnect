@@ -81,7 +81,7 @@ class AdminPanelController extends Controller
             //'help' => route('admin_help'),
             //'developers' => route('admin_developers'),
             //'employers' => route('admin_employers'),
-            //'postings' => route('admin_job_postings'),
+            'postings' => route('job_postings'),
             'pending' => route('pending_approvals'),
             //'messages' => route('admin_messages'),
         ];

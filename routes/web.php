@@ -13,7 +13,7 @@ use App\Http\Controllers\AdminPanelController;
 use App\Http\Controllers\PendingApprovalController;
 use App\Http\Controllers\DeveloperController;
 use App\Http\Controllers\EmployerSearchController;
-
+use App\Http\Controllers\EmployerController;
 
 // Home Page
 Route::get('/', function () {
@@ -104,8 +104,12 @@ Route::middleware('auth:admin')->group(function () {
     Route::delete('/admin/job_postings/{job_posting}', [JobPostController::class, 'destroy'])->name('job_postings.destroy');
 });
 
-
-
+Route::middleware('auth:admin')->group(function () {
+    Route::get('/admin/employers', [EmployerController::class, 'index'])->name('admin_employers');
+    Route::get('/admin/employers/{employer}', [EmployerController::class, 'show'])->name('admin_employers.show');
+    Route::put('/admin/employers/{user}', [EmployerController::class, 'update'])->name('admin_employers.update');
+    Route::delete('/admin/employers/{employer}', [EmployerController::class, 'destroy'])->name('admin_employers.destroy');
+});
 
 
 
