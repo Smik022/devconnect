@@ -129,5 +129,10 @@ Route::middleware('auth:admin')->group(function () {
     Route::delete('/admin/employers/{employer}', [EmployerController::class, 'destroy'])->name('admin_employers.destroy');
 });
 
-
+Route::middleware('auth:admin')->group(function () {
+    Route::get('/admin/developers', [DeveloperController::class, 'dev_index'])->name('admin_developers');
+    Route::get('/admin/developers/{developer}', [DeveloperController::class, 'show'])->name('admin_developers.show');
+    Route::put('/admin/developers/{user}', [DeveloperController::class, 'update'])->name('admin_developers.update');
+    Route::delete('/admin/developers/{developer}', [DeveloperController::class, 'destroy'])->name('admin_developers.destroy');
+});
 

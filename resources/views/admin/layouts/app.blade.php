@@ -350,7 +350,7 @@
                     </div>
                 </form>
 
-                <a href="#" class="user-profile" style="display: flex; align-items: center; gap: 6px;">
+                <a href="{{ route('admin_profile') }}" class="user-profile" style="display: flex; align-items: center; gap: 6px;">
                     <i class="bi bi-person-circle" style="font-size: 20px;"></i>
                     {{ Auth::guard('admin')->user()->name }}
                 </a>
@@ -372,7 +372,7 @@
                 <a href="{{ route('admin_profile') }}" class="{{ request()->routeIs('admin_profile') ? 'active' : '' }}">
                     <i class="bi bi-person-circle"></i> Profile
                 </a>
-                <a href="#" class="{{ request()->routeIs('developers') ? 'active' : '' }}">
+                <a href="{{ route('admin_developers') }}" class="{{ request()->routeIs('admin_developers') ? 'active' : '' }}">
                     <i class="bi bi-people"></i> Developers
                 </a>
                 <a href="{{ route('admin_employers') }}" class="{{ request()->routeIs('admin_employers') ? 'active' : '' }}">

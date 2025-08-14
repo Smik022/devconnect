@@ -182,19 +182,57 @@
     .modal-body::-webkit-scrollbar {
         display: none;
     }
-    
+    .skill-badge {
+        display: inline-block;
+        background-color: #6f42c1; 
+        color: #fff;
+        vertical-align: middle;
+        padding: 2px 6px;
+        margin: 0 3px 3px 0;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        user-select: none;
+        white-space: nowrap;
+    }
+    .skill-badge:hover {
+        background-color: #5a32a3; 
+     }
+    .skill-badge.na {
+        background-color: #6c757d; 
+    }
+    .skill-badge.na:hover {
+        background-color: #5c636a; 
+    }
+    #view-skills {
+        display: inline-block;
+    }
+    .url-field {
+        text-decoration: none;     
+        color: #0d6efd;             
+        cursor: pointer;            
+    }
+    .url-field:hover {
+        color: #dc3545; 
+    }
+    .url-field.disabled {
+        color: #6c757d;            
+        pointer-events: none;       
+        cursor: not-allowed;        
+    }
+  
 </style>
 
 <div class="container py-4">
-    <h1 class="mb-4 text-primary">Employers</h1>
-    <form method="GET" action="{{ route('admin_employers') }}" class="mb-3 d-flex" role="search">
+    <h1 class="mb-4 text-primary">Developers</h1>
+    <form method="GET" action="{{ route('admin_developers') }}" class="mb-3 d-flex" role="search">
         <input
-        type="search"
-        name="search"
-        value="{{ request('search') }}"
-        class="form-control me-2 border-primary"
-        placeholder="Search employers..."
-        aria-label="Search"
+            type="search"
+            name="search"
+            value="{{ request('search') }}"
+            class="form-control me-2 border-primary"
+            placeholder="Search developers..."
+            aria-label="Search"
         />
         <button type="submit" class="btn btn-outline-primary">Search</button>
     </form>
@@ -204,120 +242,145 @@
             <thead class="table-primary">
                 <tr>
                     @php
-                    $columns = [
-                        'name' => 'Name',
-                        'email' => 'Email',
-                        'created_at' => 'Created At',
-                    ];
-
-                    $currentSort = request('sort', 'name');
-                    $currentDir = request('direction', 'asc');
+                        $columns = [
+                            'name' => 'Name',
+                            'email' => 'Email',
+                            'bio' => 'Bio',
+                            'skills' => 'Skills',
+                            'experience' => 'Experience',
+                            'education' => 'Education',
+                            'created_at' => 'Joined',
+                        ];
+                        $currentSort = request('sort', 'name');
+                        $currentDir = request('direction', 'asc');
+                    
                     @endphp
 
                     @foreach($columns as $col => $label)
-                    <th>
-                        <a href="{{ request()->fullUrlWithQuery([
-                        'sort' => $col,
-                        'direction' => ($currentSort === $col && $currentDir === 'asc') ? 'desc' : 'asc'
-                        ]) }}"
-                        class="text-decoration-none text-dark"
-                        >
-                            {{ $label }}
-                            @if($currentSort === $col)
-                            <i class="bi bi-caret-{{ $currentDir === 'asc' ? 'up' : 'down' }}-fill"></i>
-                            @endif
-                        </a>
-                    </th>
+                        <th>
+                            <a href="{{ request()->fullUrlWithQuery([
+                                'sort' => $col,
+                                'direction' => ($currentSort === $col && $currentDir === 'asc') ? 'desc' : 'asc'
+                            ]) }}"
+                            class="text-decoration-none text-dark"
+                            >
+                                {{ $label }}
+                                @if($currentSort === $col)
+                                    <i class="bi bi-caret-{{ $currentDir === 'asc' ? 'up' : 'down' }}-fill"></i>
+                                @endif
+                            </a>
+                        </th>
                     @endforeach
                     <th style="width: 140px;">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse($employers as $employer)
-                <tr>
-                    <td>{{ $employer->name }}</td>
-                    <td>{{ $employer->email }}</td>
-                    <td>{{ $employer->created_at->format('Y-m-d') }}</td>                    
-                    <td>
-                        <button
-                        class="btn btn-sm btn-info me-1"
-                        data-bs-toggle="modal"
-                        data-bs-target="#viewModal"
-                        data-id="{{ $employer->id }}"
-                        data-name="{{ $employer->name }}"
-                        data-email="{{ $employer->email }}"
-                        data-role="{{ $employer->role }}"
-                        data-bio="{{ $employer->bio }}"
-                        data-skills="{{ $employer->skills }}"
-                        data-experience="{{ $employer->experience }}"
-                        data-education="{{ $employer->education }}"
-                        data-github="{{ $employer->github }}"
-                        data-stackoverflow="{{ $employer->stackoverflow }}"
-                        data-portfolio="{{ $employer->portfolio }}"
-                        data-resume="{{ $employer->resume }}"
-                        data-created-at="{{ $employer->created_at }}"
-                        title="View"
-                        >
-                            <i class="bi bi-eye"></i>
-                        </button>
-
-                        <button
-                        class="btn btn-sm btn-warning me-1"
-                        data-bs-toggle="modal"
-                        data-bs-target="#editModal"
-                        data-id="{{ $employer->id }}"
-                        data-name="{{ $employer->name }}"
-                        data-email="{{ $employer->email }}"
-                        data-bio="{{ $employer->bio }}"
-                        data-skills="{{ $employer->skills }}"
-                        data-experience="{{ $employer->experience }}"
-                        data-education="{{ $employer->education }}"
-                        data-github="{{ $employer->github }}"
-                        data-stackoverflow="{{ $employer->stackoverflow }}"
-                        data-portfolio="{{ $employer->portfolio }}"
-                        data-resume="{{ $employer->resume }}"
-                        title="Edit"
-                        >
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                        <form
-                        action="{{ route('admin_employers.destroy', $employer->id) }}"
-                        method="POST"
-                        class="d-inline delete-form"
-                        >
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-sm btn-danger" type="submit" title="Delete">
-                                <i class="bi bi-trash"></i>
+                @forelse($developers as $developer)
+                    <tr>
+                        <td>{{ $developer->name }}</td>
+                        <td>{{ $developer->email }}</td>
+                        <td>{{ \Illuminate\Support\Str::limit($developer->bio ?? 'N/A', 20) }}</td>
+                        <td>
+                            @php
+                                $skillsArray = $developer->skills ? array_map('trim', explode(',', $developer->skills)) : [];
+                                $skillsArray = array_slice($skillsArray, 0, 20);
+                                $displaySkills = $skillsArray ? implode(', ', $skillsArray) : 'N/A';
+                            @endphp
+                            {{ $displaySkills }}
+                        </td>
+                        <td>{{ \Illuminate\Support\Str::limit($developer->experience ?? 'N/A', 20) }}</td>
+                        <td>{{ \Illuminate\Support\Str::limit($developer->education ?? 'N/A', 20) }}</td>
+                        <td>{{ $developer->created_at->format('Y-m-d') }}</td>
+                        <td>
+                            <button
+                            class="btn btn-sm btn-info me-1"
+                            data-bs-toggle="modal"
+                            data-bs-target="#viewModal"
+                            data-id="{{ $developer->id }}"
+                            data-name="{{ $developer->name }}"
+                            data-email="{{ $developer->email }}"
+                            data-bio="{{ $developer->bio }}"
+                            data-skills="{{ $developer->skills }}"
+                            data-experience="{{ $developer->experience }}"
+                            data-education="{{ $developer->education }}"
+                            data-github="{{ $developer->github }}"
+                            data-stackoverflow="{{ $developer->stackoverflow }}"
+                            data-portfolio="{{ $developer->portfolio }}"
+                            data-resume="{{ $developer->resume }}"
+                            data-created-at="{{ $developer->created_at }}"
+                            title="View"
+                            >
+                                <i class="bi bi-eye"></i>
                             </button>
-                        </form>
-                    </td>
 
-                </tr>
+                            <button
+                            class="btn btn-sm btn-warning me-1"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editModal"
+                            data-id="{{ $developer->id }}"
+                            data-name="{{ $developer->name }}"
+                            data-email="{{ $developer->email }}"
+                            data-role="{{ $developer->role }}"
+                            data-bio="{{ $developer->bio }}"
+                            data-skills="{{ $developer->skills }}"
+                            data-experience="{{ $developer->experience }}"
+                            data-education="{{ $developer->education }}"
+                            data-github="{{ $developer->github }}"
+                            data-stackoverflow="{{ $developer->stackoverflow }}"
+                            data-portfolio="{{ $developer->portfolio }}"
+                            data-resume="{{ $developer->resume }}"
+                            title="Edit"
+                            >
+                                <i class="bi bi-pencil"></i>
+                            </button>
+
+                            <form
+                            action="{{ route('admin_developers.destroy', $developer->id) }}"
+                            method="POST"
+                            class="d-inline delete-form"
+                            >
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-sm btn-danger" type="submit" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
                 @empty
-                <tr class="no-data-row">
-                    <td colspan="4" class="no-data text-center">
-                        No employers found.
-                    </td>
-                </tr>
+                    <tr class="no-data-row">
+                        <td colspan="8" class="no-data text-center">
+                            No developers found.
+                        </td>
+                    </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
 </div>
 
+
 <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content border-info">
             <div class="modal-header bg-info text-white">
-                <h5 class="modal-title" id="viewModalLabel">Employer Details</h5>
+                <h5 class="modal-title" id="viewModalLabel">Developer Details</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p><strong>Name:</strong> <span id="view-name"></span></p>
                 <p><strong>Email:</strong> <span id="view-email"></span></p>
-                <p><strong>Created At:</strong> <span id="view-created-at"></span></p>
+                <p><strong>Bio:</strong> <span id="view-bio"></span></p>
+                <p><strong>Skills:</strong> <span id="view-skills"></span></p>
+                <p><strong>Experience:</strong> <span id="view-experience"></span></p>
+                <p><strong>Education:</strong> <span id="view-education"></span></p>
+                <p><strong>GitHub:</strong> <a id="view-github" href="#" target="_blank" class="url-field">N/A</a></p>
+                <p><strong>StackOverflow:</strong> <a id="view-stackoverflow" href="#" target="_blank" class="url-field">N/A</a></p>
+                <p><strong>Portfolio:</strong> <a id="view-portfolio" href="#" target="_blank" class="url-field">N/A</a></p>
+                <p><strong>Resume:</strong> <a id="view-resume" href="#" target="_blank" class="url-field">N/A</a></p>
+                <p><strong>Joined:</strong> <span id="view-created-at"></span></p>
             </div>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
@@ -332,7 +395,7 @@
             @method('PUT')
 
             <div class="modal-header bg-warning text-dark">
-                <h5 class="modal-title" id="editModalLabel">Edit Employer</h5>
+                <h5 class="modal-title" id="editModalLabel">Edit Developer</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -347,6 +410,54 @@
                     <label for="edit-email" class="form-label">Email</label>
                     <input type="email" name="email" id="edit-email" class="form-control" maxlength="255" required aria-describedby="email-error" />
                     <div class="invalid-feedback" id="email-error" style="color: #dc3545; font-weight: 600; font-size: 0.9rem; margin-top: 0.25rem; font-style: italic;"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="edit-bio" class="form-label">Bio</label>
+                    <textarea name="bio" id="edit-bio" class="form-control" rows="3" aria-describedby="bio-error"></textarea>
+                    <div class="invalid-feedback" id="bio-error" style="color: #dc3545; font-weight: 600; font-size: 0.9rem; margin-top: 0.25rem; font-style: italic;"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="edit-skills" class="form-label">Skills</label>
+                    <input type="text" name="skills" id="edit-skills" class="form-control" aria-describedby="skills-error" />
+                    <div class="invalid-feedback" id="skills-error" style="color: #dc3545; font-weight: 600; font-size: 0.9rem; margin-top: 0.25rem; font-style: italic;"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="edit-experience" class="form-label">Experience</label>
+                    <input type="text" name="experience" id="edit-experience" class="form-control" aria-describedby="experience-error" />
+                    <div class="invalid-feedback" id="experience-error" style="color: #dc3545; font-weight: 600; font-size: 0.9rem; margin-top: 0.25rem; font-style: italic;"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="edit-education" class="form-label">Education</label>
+                    <input type="text" name="education" id="edit-education" class="form-control" aria-describedby="education-error" />
+                    <div class="invalid-feedback" id="education-error" style="color: #dc3545; font-weight: 600; font-size: 0.9rem; margin-top: 0.25rem; font-style: italic;"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="edit-github" class="form-label">GitHub</label>
+                    <input type="url" name="github" id="edit-github" class="form-control" aria-describedby="github-error" />
+                    <div class="invalid-feedback" id="github-error" style="color: #dc3545; font-weight: 600; font-size: 0.9rem; margin-top: 0.25rem; font-style: italic;"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="edit-stackoverflow" class="form-label">StackOverflow</label>
+                    <input type="url" name="stackoverflow" id="edit-stackoverflow" class="form-control" aria-describedby="stackoverflow-error" />
+                    <div class="invalid-feedback" id="stackoverflow-error" style="color: #dc3545; font-weight: 600; font-size: 0.9rem; margin-top: 0.25rem; font-style: italic;"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="edit-portfolio" class="form-label">Portfolio</label>
+                    <input type="url" name="portfolio" id="edit-portfolio" class="form-control" aria-describedby="portfolio-error" />
+                    <div class="invalid-feedback" id="portfolio-error" style="color: #dc3545; font-weight: 600; font-size: 0.9rem; margin-top: 0.25rem; font-style: italic;"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="edit-resume" class="form-label">Resume</label>
+                    <input type="url" name="resume" id="edit-resume" class="form-control" aria-describedby="resume-error" />
+                    <div class="invalid-feedback" id="resume-error" style="color: #dc3545; font-weight: 600; font-size: 0.9rem; margin-top: 0.25rem; font-style: italic;"></div>
                 </div>
             </div>
 
@@ -367,11 +478,16 @@
         function toggleError(input, errorElem, show, message = '') {
             if (show) {
                 input.classList.add('is-invalid');
-                errorElem.textContent = message;
-                errorElem.style.display = 'block';
+                if (errorElem) {
+                    errorElem.style.display = 'block';
+                    errorElem.textContent = message;
+                }
             } else {
                 input.classList.remove('is-invalid');
-                errorElem.style.display = 'none';
+                if (errorElem) {
+                    errorElem.style.display = 'none';
+                    errorElem.textContent = '';
+                }
             }
         }
 
@@ -385,7 +501,7 @@
                 timerProgressBar: true,
                 showConfirmButton: false,
                 didOpen: () => {
-                const timerBar = Swal.getTimerProgressBar();
+                    const timerBar = Swal.getTimerProgressBar();
                     if (timerBar) {
                         timerBar.style.background = '#0dcaf0';
                         timerBar.style.boxShadow = 'none';
@@ -413,16 +529,28 @@
                 const button = event.relatedTarget;
 
                 const urlFields = ['github', 'stackoverflow', 'portfolio', 'resume'];
-                const otherFields = [
-                'name', 'email', 'bio', 'skills', 'experience', 'education'
-                ];
+                const otherFields = ['name', 'email', 'bio', 'experience', 'education'];
 
                 otherFields.forEach(field => {
                     const elem = document.getElementById(`view-${field}`);
                     if (!elem) return;
-                    const value = button.getAttribute(`data-${field}`) || 'Not provided';
+                    const value = button.getAttribute(`data-${field}`) || 'N/A';
                     elem.textContent = value;
                 });
+
+                const skillsElem = document.getElementById('view-skills');
+                if (skillsElem) {
+                    const skills = button.getAttribute('data-skills');
+                    if (skills) {
+                        const skillsArray = skills.split(',').map(s => s.trim());
+                        skillsElem.innerHTML = skillsArray
+                        .map(s => `<span class="skill-badge me-1">${s}</span>`)
+                        .join('');
+                    } else {
+                        skillsElem.innerHTML = '<span class="skill-badge na">N/A</span>';
+                    }
+                }
+
 
                 urlFields.forEach(field => {
                     const elem = document.getElementById(`view-${field}`);
@@ -432,13 +560,11 @@
                     if (url && isValidUrl(url)) {
                         elem.href = url;
                         elem.textContent = url;
-                        elem.style.pointerEvents = 'auto';
-                        elem.style.color = ''; 
+                        elem.classList.remove('disabled');
                     } else {
                         elem.removeAttribute('href');
-                        elem.textContent = 'Not provided';
-                        elem.style.pointerEvents = 'none';
-                        elem.style.color = '#6c757d'; 
+                        elem.textContent = 'N/A';
+                        elem.classList.add('disabled');
                     }
                 });
 
@@ -456,32 +582,6 @@
             });
         }
 
-
-        function toggleError(inputElem, errorElem, show, message = '') {
-        if (show) {
-                inputElem.classList.add('is-invalid');
-                if (errorElem) {
-                    errorElem.style.display = 'block';
-                    errorElem.textContent = message;
-                }
-            } else {
-                inputElem.classList.remove('is-invalid');
-                if (errorElem) {
-                    errorElem.style.display = 'none';
-                    errorElem.textContent = '';
-                }
-            }
-        }
-
-        function isValidURL(str) {
-            try {
-                new URL(str);
-                return true;
-            } catch {
-                return false;
-            }
-        }
-
         const editModal = document.getElementById('editModal');
         const editForm = document.getElementById('editForm');
 
@@ -491,9 +591,12 @@
                 if (!button) return;
 
                 const id = button.getAttribute('data-id');
-                editForm.action = '/admin/employers/' + id;
+                editForm.action = '/admin/developers/' + id;
 
-                const fields = ['name', 'email'];
+                const fields = [
+                    'name', 'email', 'role', 'bio', 'skills', 'experience',
+                    'education', 'github', 'stackoverflow', 'portfolio', 'resume'
+                ];
 
                 fields.forEach(field => {
                     const input = editForm.querySelector(`#edit-${field}`);
@@ -516,10 +619,10 @@
 
                 function formatFieldName(field) {
                     return field
-                        .replace(/_/g, ' ')
-                        .split(' ')
-                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                        .join(' ');
+                    .replace(/_/g, ' ')
+                    .split(' ')
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(' ');
                 }
 
                 ['name', 'email'].forEach(field => {
@@ -537,16 +640,51 @@
                     }
                 });
 
-                if (!valid) return;
+                const urlFields = ['github', 'stackoverflow', 'portfolio', 'resume'];
+                urlFields.forEach(field => {
+                    const input = editForm.querySelector(`#edit-${field}`);
+                    const errorElem = document.getElementById(`${field}-error`);
+                    if (!input || !input.value.trim()) return;
 
+                    try {
+                        const url = new URL(input.value.trim());
+                        let validDomain = true;
+
+                        if (field === 'github' && !url.hostname.includes('github.com')) validDomain = false;
+                        if (field === 'stackoverflow' && !url.hostname.includes('stackoverflow.com')) validDomain = false;
+                        if (field === 'portfolio' && url.hostname.includes('github.com', 'stackoverflow.com')) validDomain = false;
+                        if (field === 'resume' && url.hostname.includes('github.com', 'stackoverflow.com')) validDomain = false;
+
+                        if (!validDomain) {
+                            toggleError(input, errorElem, true, `The ${formatFieldName(field).toLowerCase()} URL is invalid for this field.`);
+                            valid = false;
+                        } else {
+                            toggleError(input, errorElem, false);
+                        }
+                    } catch (err) {
+                        toggleError(input, errorElem, true, `The ${formatFieldName(field).toLowerCase()} field must be a valid URL.`);
+                        valid = false;
+                    }
+                });
+
+                if (!valid) return;
+                const skillsInput = editForm.querySelector('#edit-skills');
+                if (skillsInput && skillsInput.value.trim()) {
+                    const cleanedSkills = skillsInput.value
+                    .split(',')
+                    .map(s => s.trim())
+                    .filter(s => s.length > 0)
+                    .join(', ');
+                    skillsInput.value = cleanedSkills;
+                }
                 const formData = new FormData(editForm);
 
                 fetch(editForm.action, {
                     method: 'POST',
                     headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
                     },
                     body: formData,
                 })
@@ -556,14 +694,14 @@
                 })
                 .then(data => {
                     if (data.success) {
-                        showSwalFlash('success', 'Success', 'Employer updated successfully!');
+                        showSwalFlash('success', 'Success', 'Developer updated successfully!');
                         const modalInstance = bootstrap.Modal.getInstance(editModal);
                         modalInstance.hide();
                         setTimeout(() => {
                             location.reload();
                         }, 1500);
                     } else {
-                        showSwalFlash('error', 'Error', data.message || 'Failed to update employer.');
+                        showSwalFlash('error', 'Error', data.message || 'Failed to update developer.');
                     }
                 })
                 .catch(errorData => {
@@ -576,7 +714,7 @@
                             }
                         });
                     } else {
-                        showSwalFlash('error', 'Error', 'Failed to update employer.');
+                        showSwalFlash('error', 'Error', 'Failed to update developer.');
                     }
                 });
             });
@@ -586,11 +724,11 @@
             form.addEventListener('submit', function (e) {
                 e.preventDefault();
 
-                const employerName = form.closest('tr')?.querySelector('td:first-child')?.textContent.trim() || 'this employer';
+                const developerName = form.closest('tr')?.querySelector('td:first-child')?.textContent.trim() || 'this developer';
 
                 Swal.fire({
                     title: 'Confirm Delete',
-                    html: `Are you sure you want to delete <strong>${employerName}</strong>?`,
+                    html: `Are you sure you want to delete <strong>${developerName}</strong>?`,
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Yes, Delete',
@@ -599,8 +737,8 @@
                     cancelButtonColor: '#6c757d',
                     focusCancel: true,
                 }).then((result) => {
-                    if (result.isConfirmed) {
-                        fetch(form.action, {
+                if (result.isConfirmed) {
+                    fetch(form.action, {
                             method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -618,7 +756,7 @@
                                 icon: 'success',
                                 iconColor: '#198754',
                                 title: 'Deleted!',
-                                text: data.message || 'Employer has been deleted.',
+                                text: data.message || 'Developer has been deleted.',
                                 timer: 3000,
                                 timerProgressBar: true,
                                 showConfirmButton: false,
@@ -640,18 +778,18 @@
 
                             const tbody = document.querySelector('table tbody');
                             if (tbody && tbody.querySelectorAll('tr:not(.no-data-row)').length === 0) {
-                                tbody.innerHTML = `
-                                <tr class="no-data-row">
-                                    <td colspan="4" class="no-data">No employers found.</td>
-                                </tr>`;
+                            tbody.innerHTML = `
+                            <tr class="no-data-row">
+                                <td colspan="8" class="no-data">No developers found.</td>
+                            </tr>`;
                             }
                         })
                         .catch(error => {
-                        Swal.fire({
+                            Swal.fire({
                                 icon: 'error',
                                 iconColor: '#b02a37',
                                 title: 'Error!',
-                                text: 'Failed to delete employer. Please try again.',
+                                text: 'Failed to delete developer. Please try again.',
                                 timer: 3000,
                                 timerProgressBar: true,
                                 showConfirmButton: false,
@@ -679,7 +817,8 @@
         }
         @endif
     });
-    
+        
 </script>
+
 
 @endsection
