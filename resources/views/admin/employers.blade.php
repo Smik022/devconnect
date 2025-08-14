@@ -207,7 +207,7 @@
                     $columns = [
                         'name' => 'Name',
                         'email' => 'Email',
-                        'created_at' => 'Created At',
+                        'created_at' => 'Joined',
                     ];
 
                     $currentSort = request('sort', 'name');
@@ -316,7 +316,7 @@
             <div class="modal-body">
                 <p><strong>Name:</strong> <span id="view-name"></span></p>
                 <p><strong>Email:</strong> <span id="view-email"></span></p>
-                <p><strong>Created At:</strong> <span id="view-created-at"></span></p>
+                <p><strong>Joined:</strong> <span id="view-created-at"></span></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

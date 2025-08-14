@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Edit Developer Profile - DevConnect</title>
+    <title>Manage Developer Portfolio - DevConnect</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body class="bg-light">
@@ -14,7 +14,7 @@
 </nav>
 
 <div class="container">
-    <h1 class="mb-4">Edit Developer Profile</h1>
+    <h1 class="mb-4">Manage Developer Portfolio - DevConnect</h1>
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>

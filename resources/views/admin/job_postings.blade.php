@@ -244,7 +244,7 @@
                         'job_type'     => 'Job Type',
                         'location'     => 'Location',
                         'company_name' => 'Company Name',
-                        'created_at'   => 'Posted At',
+                        'created_at'   => 'Posted at',
                     ];
                     $currentSort = request('sort', 'title');
                     $currentDir = request('direction', 'asc');
@@ -356,7 +356,7 @@
                 <p><strong>Job Type:</strong> <span id="view-job_type"></span></p>
                 <p><strong>Location:</strong> <span id="view-location"></span></p>
                 <p><strong>Company Name:</strong> <span id="view-company_name"></span></p>
-                <p><strong>Posted At:</strong> <span id="view-created_at"></span></p>
+                <p><strong>Posted at:</strong> <span id="view-created_at"></span></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

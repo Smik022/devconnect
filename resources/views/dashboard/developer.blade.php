@@ -87,7 +87,7 @@
 
 
         <div class="d-flex justify-content-between">
-            <a href="{{ route('developer.profile.edit') }}" class="btn btn-secondary">✏️ Edit Profile</a>
+            <a href="{{ route('developer.profile.edit') }}" class="btn btn-secondary">✏️ Manage Portfolio</a>
             <a href="{{ route('home') }}" class="btn btn-outline-dark">🏠 Go to Home</a>
 
             <form method="POST" action="{{ route('logout') }}">
