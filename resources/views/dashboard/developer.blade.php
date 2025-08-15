@@ -83,6 +83,9 @@
                     <span class="badge bg-danger ms-1">{{ $wishlistCount }}</span>
                 @endif
             </a>
+            <a href="{{ url('/tasks') }}" class="btn btn-outline-info btn-lg rounded-pill ms-2">
+                <i class="bi bi-clipboard-check"></i> View My Tasks 📋
+            </a>
         </div>
 
 

@@ -11,9 +11,12 @@
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">DevConnect</a>
             <div class="d-flex">
+                <a href="{{ url('/tasks') }}" class="btn btn-outline-light ms-3" style="border-radius: 5px; font-size: 18px;">
+                TaskBoard
+                </a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="btn btn-outline-light">Logout</button>
+                    <button type="submit" class="btn btn-outline-light ms-3" style="border-radius: 5px;">Logout</button>
                 </form>
             </div>
         </div>
@@ -33,6 +36,12 @@
                 @if(isset($jobCount) && $jobCount > 0)
                     <span class="badge bg-light text-dark ms-1">{{ $jobCount }}</span>
                 @endif
+            </a>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{{ url('/tasks') }}" class="btn btn-info" style="border-radius: 50px; padding: 10px 30px; font-size: 18px;">
+                Go to TaskBoard 
             </a>
         </div>
     </div>

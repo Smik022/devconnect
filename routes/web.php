@@ -16,7 +16,7 @@ use App\Http\Controllers\EmployerSearchController;
 use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\WishlistController;
-
+use App\Http\Controllers\TaskController;
 // Home Page
 Route::get('/', function () {
     return view('welcome');
@@ -82,10 +82,16 @@ Route::middleware(['auth'])->group(function () {
 #developer directory search
 Route::get('/developers', [DeveloperController::class, 'index'])->name('developers.index');
 
-#employers search
+//Adrita
+//Employer search
 Route::get('/employers/search', [EmployerSearchController::class, 'search'])->name('employers.search');
 
-
+//tasks stuff
+Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
+Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
+Route::post('/tasks/{task}/update-status', [TaskController::class, 'updateStatus'])->name('tasks.updateStatus');
+Route::post('/tasks/{task}/approve', [TaskController::class, 'approveTask'])->middleware('auth');
+Route::delete('/tasks/{task}', [TaskController::class, 'deleteTask'])->middleware('auth');
 
 
 //APURBO
