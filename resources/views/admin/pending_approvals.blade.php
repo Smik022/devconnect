@@ -302,10 +302,10 @@
                     'description' => 'Description',
                     'category' => 'Category',
                     'salary' => 'Salary',
-                    'job_type' => 'Job Type',
+                    'job_type' => 'Type',
                     'location' => 'Location',
-                    'company_name' => 'Company Name',
-                    'created_at' => 'Posted at',
+                    'company_name' => 'Company',
+                    'created_at' => 'Posted',
                     ];
                     $currentSort = request('sort', 'title');
                     $currentDir = request('direction', 'asc');
@@ -330,7 +330,7 @@
                     <td>{{ $approval->title }}</td>
                     <td>{{ Str::limit($approval->description, 20) }}</td>
                     <td>{{ $approval->category }}</td>
-                    <td>{{ $approval->salary }}</td>
+                    <td>${{ $approval->salary }}</td>
                     <td>{{ $approval->job_type }}</td>
                     <td>{{ $approval->location }}</td>
                     <td>{{ $approval->company_name }}</td>
@@ -386,7 +386,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p><strong>Title:</strong> <span id="view-title"></span></p>
+                <p><strong>Job Title:</strong> <span id="view-title"></span></p>
                 <p><strong>Description:</strong> <span id="view-description"></span></p>
                 <p><strong>Category:</strong> <span id="view-category"></span></p>
                 <p><strong>Salary:</strong> <span id="view-salary"></span></p>
@@ -537,16 +537,27 @@
         document.getElementById('view-title').textContent = approval.title || '';
         document.getElementById('view-description').textContent = approval.description || '';
         document.getElementById('view-category').textContent = approval.category || '';
-        document.getElementById('view-salary').textContent = approval.salary || '';
+        const formattedSalary = parseFloat(approval.salary).toLocaleString('en-US'); 
+        document.getElementById('view-salary').textContent = `$${formattedSalary}`;
         document.getElementById('view-job-type').textContent = approval.job_type || '';
         document.getElementById('view-location').textContent = approval.location || '';
         document.getElementById('view-company-name').textContent = approval.company_name || '';
-        document.getElementById('view-created-at').textContent = approval.created_at
-        ? approval.created_at.split('T')[0]
-        : '';
+
+        if (approval.created_at) {
+            const date = new Date(approval.created_at);
+            document.getElementById('view-created-at').textContent = date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        } else {
+            document.getElementById('view-created-at').textContent = '';
+        }
+
         const modal = new bootstrap.Modal(document.getElementById('viewModal'));
         modal.show();
     }
+
 </script>
 
 @endsection

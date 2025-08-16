@@ -241,10 +241,10 @@
                         'description'  => 'Description',
                         'category'     => 'Category',
                         'salary'       => 'Salary',
-                        'job_type'     => 'Job Type',
+                        'job_type'     => 'Type',
                         'location'     => 'Location',
-                        'company_name' => 'Company Name',
-                        'created_at'   => 'Posted at',
+                        'company_name' => 'Company',
+                        'created_at'   => 'Posted',
                     ];
                     $currentSort = request('sort', 'title');
                     $currentDir = request('direction', 'asc');
@@ -539,19 +539,31 @@
         }
 
         const viewModal = document.getElementById('viewModal');
-            if (viewModal) {
+        if (viewModal) {
             viewModal.addEventListener('show.bs.modal', function (event) {
-                    const button = event.relatedTarget;
-                    const fields = ['title', 'description', 'category', 'salary', 'job_type', 'location', 'company_name', 'created_at'];
-                    fields.forEach(field => {
-                        const elem = document.getElementById(`view-${field}`);
-                        let value = button.getAttribute(`data-${field}`) || '-';
-                        if (field === 'salary' && value !== '-') {
-                            value = `$${parseFloat(value).toFixed(0)}`;
-                        }
-                        elem.textContent = value;
-                    });
+                const button = event.relatedTarget;
+                const fields = ['title', 'description', 'category', 'salary', 'job_type', 'location', 'company_name', 'created_at'];
+                fields.forEach(field => {
+                    const elem = document.getElementById(`view-${field}`);
+                    let value = button.getAttribute(`data-${field}`) || '-';
+                    
+
+                    if (field === 'salary' && value !== '-') {
+                        value = `$${parseFloat(value).toLocaleString('en-US')}`;
+                    }
+
+                    if (field === 'created_at' && value !== '-') {
+                        const date = new Date(value);
+                        value = date.toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+                    }
+
+                    elem.textContent = value;
                 });
+            });
         }
 
         function toggleError(inputElem, errorElem, show, columnName = '') {
