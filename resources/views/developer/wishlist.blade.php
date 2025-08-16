@@ -28,6 +28,22 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
+        /* Remove any border or background causing the black line */
+        /* Ensure no borders, shadows, or backgrounds anywhere on the page */
+        body, .container, .row, .card, .job-card {
+            border: none !important;           /* Removes any border */
+            box-shadow: none !important;       /* Removes any box-shadow */
+            background-color: transparent !important; /* Removes any background color */
+        }
+
+/* Targeting card specifically to ensure no border or background */
+        .card {
+            border: none !important;
+            box-shadow: none !important;
+            background-color: transparent !important;
+        }
+
+
     </style>
 </head>
 <body class="bg-light">
@@ -113,9 +129,9 @@
         @endif
     </div>
 
-    <footer class="bg-dark text-white text-center py-3 mt-5">
+    <!-- <footer class="bg-dark text-white text-center py-3 mt-5">
         <p class="mb-0">© 2025 DevConnect. All rights reserved.</p>
-    </footer>
+    </footer> -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
