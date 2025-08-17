@@ -165,10 +165,30 @@
         }
 
         function viewApplication(applicationId) {
-            // For now, just show a simple message
-            // In a real application, you would fetch the application details
-            alert('Application details would be displayed here. This feature can be expanded to show the full proposal and applicant information.');
+    // Open the modal
+    var myModal = new bootstrap.Modal(document.getElementById('applicationModal'));
+    myModal.show();
+
+    // Fetch the application details
+    fetch(`/application/${applicationId}/details`, {
+        method: 'GET',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+            'Accept': 'application/json'
         }
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Show only the proposal in the modal body
+        document.getElementById('applicationModalBody').innerHTML = `
+            <p>${data.proposal || 'No proposal provided'}</p>
+        `;
+    })
+    .catch(error => {
+        console.error('Error fetching application details:', error);
+        document.getElementById('applicationModalBody').innerHTML = '<p>Sorry, an error occurred while loading the proposal.</p>';
+    });
+}
     </script>
 </body>
 </html>

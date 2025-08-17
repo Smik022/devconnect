@@ -78,7 +78,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/wishlist/{jobId}/check', [WishlistController::class, 'check'])->name('wishlist.check');
 });
 
-
+Route::get('/application/{id}/details', [App\Http\Controllers\JobPostController::class, 'showApplicationDetails'])->name('application.details');
 #developer directory search
 Route::get('/developers', [DeveloperController::class, 'index'])->name('developers.index');
 

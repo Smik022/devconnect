@@ -164,4 +164,18 @@ class JobPostController extends Controller
         $job_posting->delete();
         return response()->json(['message' => 'Job posting deleted successfully']);
     }
+
+    public function showApplicationDetails($id)
+{
+    $application = \App\Models\JobApplication::with('user', 'jobPost')->findOrFail($id);
+
+    // Check if the current user is the employer who posted the job
+    if ($application->jobPost->user_id !== auth()->id()) {
+        abort(403, 'Unauthorized');
+    }
+
+    return response()->json([
+        'proposal' => $application->proposal ?? 'No proposal provided',
+    ]);
+}
 }
