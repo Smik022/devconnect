@@ -28,15 +28,14 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-        /* Remove any border or background causing the black line */
-        /* Ensure no borders, shadows, or backgrounds anywhere on the page */
+        
         body, .container, .row, .card, .job-card {
-            border: none !important;           /* Removes any border */
-            box-shadow: none !important;       /* Removes any box-shadow */
-            background-color: transparent !important; /* Removes any background color */
+            border: none !important;           
+            box-shadow: none !important;       
+            background-color: transparent !important; 
         }
 
-/* Targeting card specifically to ensure no border or background */
+
         .card {
             border: none !important;
             box-shadow: none !important;
