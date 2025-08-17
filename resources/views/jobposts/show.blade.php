@@ -7,6 +7,9 @@
     <title>{{ $job->title }} - DevConnect</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
     <style>
         .wishlist-btn {
             background: none;
@@ -100,6 +103,14 @@
                                 {{ $job->description }}
                             </div>
                         </div>
+                        <div class="mb-4">
+                            <h5>Job Location</h5>
+                            <div id="map" style="width: 100%; height: 400px;"></div> <!-- Map container -->
+                        </div>
+                        <div id="nearby-jobs">
+                            <h4>Nearby Jobs:</h4>
+                            <ul id="job-list"></ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -181,5 +192,77 @@
             });
         }
     </script>
+    <script>
+        var jobLat = {{ $job->latitude }};  
+        var jobLon = {{ $job->longitude }};
+
+        var map = L.map('map').setView([jobLat, jobLon], 13); 
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        
+        L.marker([jobLat, jobLon]).addTo(map)
+            .bindPopup('<strong>{{ $job->title }}</strong><br>{{ $job->location }}')
+            .openPopup(); 
+    </script>
+
+    <script>
+        var jobs = @json($jobs);  
+        function getUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var userLat = position.coords.latitude;
+                    var userLon = position.coords.longitude;
+                    console.log("User Location: " + userLat + ", " + userLon);
+
+                    filterJobsByDistance(userLat, userLon);
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        getUserLocation();
+
+        function filterJobsByDistance(userLat, userLon) {
+            var nearbyJobs = [];
+
+            jobs.forEach(function(job) {
+                var distance = calculateDistance(userLat, userLon, job.latitude, job.longitude);
+                if (distance <= 50) {
+                    nearbyJobs.push(job);
+                }
+            });
+
+            console.log("Nearby Jobs: ", nearbyJobs);
+            displayNearbyJobsList(nearbyJobs);
+        }
+
+        function calculateDistance(userLat, userLon, jobLat, jobLon) {
+            var R = 6371;  
+            var dLat = (jobLat - userLat) * Math.PI / 180;
+            var dLon = (jobLon - userLon) * Math.PI / 180;
+            var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                    Math.cos(userLat * Math.PI / 180) * Math.cos(jobLat * Math.PI / 180) *
+                    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c; 
+        }
+
+        function displayNearbyJobsList(nearbyJobs) {
+            var jobListContainer = document.getElementById('job-list');
+            jobListContainer.innerHTML = '';  
+
+            nearbyJobs.forEach(function(job) {
+                var jobItem = document.createElement('li');
+                jobItem.classList.add('job-item');
+                jobItem.innerHTML = `<strong>${job.title}</strong> - ${job.location}`;
+                jobListContainer.appendChild(jobItem);
+            });
+        }
+    </script>
+
 </body>
 </html>

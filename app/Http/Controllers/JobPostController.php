@@ -6,6 +6,7 @@ use App\Models\JobPost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\PendingApproval;
+use App\Helpers\GeocodingHelper;
 
 class JobPostController extends Controller
 {
@@ -18,6 +19,7 @@ class JobPostController extends Controller
     public function show($id)
     {
         $job = JobPost::with('user')->findOrFail($id);
+        $jobs = JobPost::all();
         $user = auth()->user();
         
         if ($user) {
@@ -28,7 +30,7 @@ class JobPostController extends Controller
             $isWishlisted = false;
         }
         
-        return view('jobposts.show', compact('job', 'hasApplied', 'isWishlisted'));
+        return view('jobposts.show', compact('job', 'jobs', 'hasApplied', 'isWishlisted'));
     }
 
     public function create()
@@ -66,6 +68,13 @@ class JobPostController extends Controller
             'company_name' => 'required',
         ]);
 
+        $coordinates = GeocodingHelper::getCoordinates($request->location);
+
+        if (!$coordinates) {
+            return back()->with('error', 'Unable to geocode the provided location.');
+        }
+
+
         PendingApproval::create([
             'user_id' => Auth::id(),
             'title' => $request->title,
@@ -74,6 +83,8 @@ class JobPostController extends Controller
             'salary' => $request->salary,
             'job_type' => $request->job_type,
             'location' => $request->location,
+            'latitude' => $coordinates['latitude'],
+            'longitude' => $coordinates['longitude'],
             'company_name' => $request->company_name,
         ]);
 
@@ -93,6 +104,8 @@ class JobPostController extends Controller
             'salary'       => $pending->salary,
             'job_type'     => $pending->job_type,
             'location'     => $pending->location,
+            'latitude'     => $pending->latitude,
+            'longitude'    => $pending->longitude,
             'company_name' => $pending->company_name,
         ]);
 

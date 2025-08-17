@@ -16,7 +16,9 @@ class PendingApproval extends Model
         'salary',
         'job_type',
         'location',
-        'company_name'
+        'company_name',
+        'latitude',
+        'longitude',
     ];
 
     public function user()
