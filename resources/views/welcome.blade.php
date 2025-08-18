@@ -72,12 +72,23 @@
                     <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
                 </nav>
 
-                <!-- CTAs -->
-                <div class="d-flex gap-2">
-                    <a class="btn-getstarted" href="{{ route('login') }}">Sign In</a>                    
-                </div>
+<!-- CTAs -->
+<div class="d-flex gap-3 align-items-center">
+    @guest
+        <a class="btn-getstarted" href="{{ route('login') }}">Sign In</a>
+    @endguest
 
-            </div>
+    @auth
+        <span class="text-black fw-semibold">
+            Hello, {{ Auth::user()->name }}!
+        </span>
+        <a href="{{ route('dashboard') }}" class="btn btn-outline-dark btn-sm">
+            Go to Dashboard
+        </a>
+    @endauth
+</div>
+
+
         </header>
 
         <main class="main">
