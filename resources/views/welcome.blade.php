@@ -56,7 +56,7 @@
             <div class="container position-relative d-flex align-items-center justify-content-between">
 
                 <!-- Logo -->
-                <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
+                <a href="#" class="logo d-flex align-items-center me-auto me-xl-0">
                     <h1 class="sitename">DevConnect</h1>
                 </a>
 
