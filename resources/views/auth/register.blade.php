@@ -1,74 +1,156 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Register - DevConnect</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-lg">
-                <div class="card-header text-center bg-primary text-white">
-                    <h3>Register</h3>
-                </div>
-                <div class="card-body">
+@extends('layouts.app')
 
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul class="mb-0">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
+@section('title', 'Register - DevConnect')
 
-                    <form method="POST" action="{{ route('register') }}">
-                        @csrf
+@section('content')
+<style>
+    .register-container {
+        min-height: 80vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-                        <div class="mb-3">
-                            <label class="form-label">Name</label>
-                            <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
-                        </div>
+    .card-register {
+        border-radius: 20px;
+        background: #1a2a50;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: none;
+    }
 
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
-                        </div>
+    .card-register:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 40px rgba(0,0,0,0.7);
+    }
 
-                        <div class="mb-3">
-                            <label class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control" required>
-                        </div>
+    .card-register .card-header {
+        background: linear-gradient(90deg, #0055ff, #00ccff);
+        color: #fff;
+        text-align: center;
+        font-weight: 700;
+        font-size: 1.5rem;
+        border-bottom: none;
+        border-radius: 20px 20px 0 0;
+    }
 
-                        <div class="mb-3">
-                            <label class="form-label">Confirm Password</label>
-                            <input type="password" name="password_confirmation" class="form-control" required>
-                        </div>
+    .card-register .form-control,
+    .card-register .form-select {
+        border-radius: 12px;
+        background: #0e1b3a;
+        color: #00ccff;
+        border: 1px solid #004aad;
+    }
 
-                        <div class="mb-3">
-                            <label class="form-label">Role</label>
-                            <select name="role" class="form-select" required>
-                                <option value="" disabled selected>Select Role</option>
-                                <option value="Developer" {{ old('role') == 'Developer' ? 'selected' : '' }}>Developer</option>
-                                <option value="Employer" {{ old('role') == 'Employer' ? 'selected' : '' }}>Employer</option>
-                            </select>
-                        </div>
+    .card-register .form-control::placeholder {
+        color: rgba(0,204,255,0.6);
+    }
 
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Register</button>
-                        </div>
-                    </form>
+    .card-register .form-control:focus,
+    .card-register .form-select:focus {
+        background: #13294d;
+        color: #00ccff;
+        border-color: #00ccff;
+        box-shadow: 0 0 10px rgba(0,204,255,0.5);
+    }
 
-                </div>
-                <div class="card-footer text-center">
-                    Already have an account? <a href="{{ route('login') }}">Login here</a>
-                </div>
+    .card-register .btn-primary {
+        border-radius: 12px;
+        background: linear-gradient(90deg, #00ccff, #0055ff);
+        border: none;
+        font-weight: 600;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card-register .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,204,255,0.5);
+    }
+
+    .card-register .form-label {
+        color: #00ccff;
+        font-weight: 600;
+    }
+
+    .card-register .dont-have-account,
+    .card-register .dont-have-account a {
+        color: #ffffff !important;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .card-register .dont-have-account a:hover {
+        color: #00ccff !important;
+        text-decoration: underline;
+    }
+
+    .alert-danger {
+        background: rgba(255,0,0,0.2);
+        border: none;
+        color: #ff6666;
+    }
+</style>
+
+<div class="register-container">
+    <div class="col-md-6 col-lg-5">
+        <div class="card card-register shadow-lg">
+            <div class="card-header">
+                📝 Register
+            </div>
+            <div class="card-body">
+
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form method="POST" action="{{ route('register') }}">
+                    @csrf
+
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input type="text" name="name" class="form-control" value="{{ old('name') }}" placeholder="Enter your name" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control" value="{{ old('email') }}" placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Confirm Password</label>
+                        <input type="password" name="password_confirmation" class="form-control" placeholder="Confirm your password" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Role</label>
+                        <select name="role" class="form-select" required>
+                            <option value="" disabled selected>Select Role</option>
+                            <option value="Developer" {{ old('role') == 'Developer' ? 'selected' : '' }}>Developer</option>
+                            <option value="Employer" {{ old('role') == 'Employer' ? 'selected' : '' }}>Employer</option>
+                        </select>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Register</button>
+                    </div>
+                </form>
+
+            </div>
+            <div class="card-footer text-center dont-have-account">
+                Already have an account? <a href="{{ route('login') }}">Login here</a>
             </div>
         </div>
     </div>
 </div>
-</body>
-</html>
+@endsection

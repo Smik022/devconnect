@@ -8,19 +8,61 @@
     <!-- Bootstrap 5 CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     
-    <!-- Custom Styling (Optional) -->
+    <!-- Custom Styling -->
     <style>
         body {
-            background-color: #f8f9fa;
+            background-color: #f0f4f8;
+        }
+
+        /* Sticky Navbar */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: linear-gradient(90deg, #0d6efd, #0056b3);
+            transition: background 0.3s;
         }
         .navbar-brand {
             font-weight: bold;
-            color: #007bff !important;
+            color: #ffffff !important;
         }
+        .nav-link {
+            color: #ffffff !important;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-link:hover, .nav-link:focus {
+            color: #ffc107 !important;
+        }
+
+        /* Footer */
         footer {
-            margin-top: 40px;
-            background-color: #f1f1f1;
-            padding: 20px;
+            margin-top: 60px;
+            background-color: #003366;
+            color: #ffffff;
+            padding: 30px 20px;
+        }
+        footer a {
+            color: #ffc107;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Buttons in Navbar */
+        .navbar .btn-link {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .navbar .btn-link:hover {
+            color: #ffc107;
+        }
+
+        /* Container adjustments */
+        .container.mt-4 {
+            min-height: 80vh;
         }
     </style>
 
@@ -29,7 +71,7 @@
 <body>
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <nav class="navbar navbar-expand-lg shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">DevConnect</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -63,7 +105,19 @@
 
     <!-- Footer -->
     <footer class="text-center">
-        <p>&copy; {{ date('Y') }} DevConnect. All rights reserved.</p>
+        <div class="container">
+            <p>&copy; {{ date('Y') }} DevConnect. All rights reserved.</p>
+            <p>
+                <a href="#">About Us</a> |
+                <a href="#">Services</a> |
+                <a href="#">Contact</a>
+            </p>
+            <p>Connect with us on 
+                <a href="#">Twitter</a>, 
+                <a href="#">LinkedIn</a>, 
+                <a href="#">GitHub</a>
+            </p>
+        </div>
     </footer>
 
     <!-- Bootstrap 5 Scripts -->
