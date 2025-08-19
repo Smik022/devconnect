@@ -12,6 +12,20 @@ class AuthController extends Controller
         return view('/admin/login');
     }
 
+    public function showContactForm()
+    {
+        return view('admin.contact'); 
+    }
+    public function submitContactForm(Request $request)
+    {
+        $request->validate([
+            'name'  => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'issue' => 'required|string',
+        ]);
+
+        return back()->with('success', 'Your message has been sent successfully!');
+    }
     public function login(Request $request)
     {
         $credentials = $request->validate([

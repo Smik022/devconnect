@@ -97,7 +97,8 @@ Route::delete('/tasks/{task}', [TaskController::class, 'deleteTask'])->middlewar
 //APURBO
 Route::get('/admin/login', [AuthController::class, 'showLoginForm'])->name('admin_login');
 Route::post('/admin/login', [AuthController::class, 'login'])->name('login.post');
-
+Route::get('/admin/contact', [AuthController::class, 'showContactForm'])->name('admin.contact');
+Route::post('/admin/contact', [AuthController::class, 'submitContactForm'])->name('admin.contact.submit');
 Route::post('/admin/logout', [AuthController::class, 'logout'])->name('admin_logout');
 
 Route::get('/admin/dashboard', [AdminPanelController::class, 'index'])

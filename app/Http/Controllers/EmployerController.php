@@ -12,23 +12,36 @@ class EmployerController extends Controller
         $query = User::where('role', 'Employer');
 
         if ($search = $request->input('search')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
-            });
+            $column = $request->input('column');
+
+            if ($column === 'created_at') {
+                $search = trim($search);
+
+                if (str_contains(strtolower($search), 'to')) {
+                    [$start, $end] = array_map('trim', explode('to', $search));
+                    $query->whereBetween('created_at', [
+                        $start . ' 00:00:00',
+                        $end . ' 23:59:59'
+                    ]);
+                } elseif (preg_match('/^\d{4}-\d{2}$/', $search)) {
+                    $query->whereYear('created_at', substr($search, 0, 4))
+                          ->whereMonth('created_at', substr($search, 5, 2));
+                } elseif (preg_match('/^\d{4}$/', $search)) {
+                    $query->whereYear('created_at', $search);
+                } else {
+                    $query->whereDate('created_at', $search);
+                }
+            } else {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%")
+                      ->orWhereDate('created_at', $search);
+                });
+            }
         }
 
-        $validSorts = [
-            'name', 'email', 'role', 'bio', 'skills', 'experience',
-            'education', 'github', 'stackoverflow', 'portfolio',
-            'resume', 'created_at', 'updated_at'
-        ];
-
-        $sort = in_array($request->input('sort'), $validSorts) ? $request->input('sort') : 'name';
-        $direction = $request->input('direction') === 'desc' ? 'desc' : 'asc';
-
-        $employers = $query->orderBy($sort, $direction)
-        ->paginate(50)
-        ->appends($request->only(['search', 'sort', 'direction']));
+        $employers = $query->paginate(50)
+                           ->appends($request->only(['search', 'column']));
 
         return view('admin.employers', compact('employers'));
 

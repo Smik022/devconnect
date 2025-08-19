@@ -280,16 +280,47 @@
 <div class="container py-4">
     <h1 class="mb-4 text-primary">Pending Approvals</h1>
 
-    <form method="GET" action="{{ route('pending_approvals') }}" class="mb-3 d-flex" role="search">
-        <input
-        type="search"
-        name="search"
-        value="{{ request('search') }}"
-        class="form-control me-2 border-primary"
-        placeholder="Search pending approvals..."
-        aria-label="Search"
-        />
-        <button type="submit" class="btn btn-outline-primary">Search</button>
+    <form method="GET" action="{{ route('pending_approvals') }}" class="mb-4" role="search">
+        <div class="input-group shadow-sm rounded">
+
+            @php
+                $columnNames = [
+                    ''             => 'All Columns',
+                    'title'        => 'Title',
+                    'description'  => 'Description',
+                    'category'     => 'Category',
+                    'salary'       => 'Salary',
+                    'job_type'     => 'Job type',
+                    'location'     => 'Location',
+                    'company_name' => 'Company name',
+                    'created_at'   => 'Posted at',
+                ];
+                $selectedColumn = request('column', '');
+            @endphp
+
+            <button class="btn btn-outline-secondary dropdown-toggle rounded-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ $columnNames[$selectedColumn] ?? 'All Columns' }}
+            </button>
+            <ul class="dropdown-menu">
+                @foreach($columnNames as $key => $label)
+                    <li><a class="dropdown-item" href="#" data-value="{{ $key }}">{{ $label }}</a></li>
+                @endforeach
+            </ul>
+            <input type="hidden" name="column" id="columnInput" value="{{ request('column') }}">
+
+            <input
+                type="search"
+                name="search"
+                value="{{ request('search') }}"
+                class="form-control border-primary"
+                placeholder="Search pending approvals..."
+                aria-label="Search"
+            />
+
+            <button type="submit" class="btn btn-primary rounded-end d-flex align-items-center">
+                <i class="bi bi-search me-2"></i>Search
+            </button>
+        </div>
     </form>
 
     <div class="table-responsive">
@@ -297,30 +328,22 @@
             <thead class="table-primary">
                 <tr>
                     @php
-                    $columns = [                    
-                    'title' => 'Title',
-                    'description' => 'Description',
-                    'category' => 'Category',
-                    'salary' => 'Salary',
-                    'job_type' => 'Type',
-                    'location' => 'Location',
-                    'company_name' => 'Company',
-                    'created_at' => 'Posted',
+                    $columns = [
+                        'title'        => 'Title',
+                        'description'  => 'Description',
+                        'category'     => 'Category',
+                        'salary'       => 'Salary',
+                        'job_type'     => 'Type',
+                        'location'     => 'Location',
+                        'company_name' => 'Company',
+                        'created_at'   => 'Posted',
                     ];
-                    $currentSort = request('sort', 'title');
-                    $currentDir = request('direction', 'asc');
                     @endphp
+
                     @foreach($columns as $col => $label)
-                    <th>
-                        <a href="{{ request()->fullUrlWithQuery(['sort' => $col, 'direction' => ($currentSort === $col && $currentDir === 'asc') ? 'desc' : 'asc']) }}"
-                        class="text-decoration-none text-dark">
-                            {{ $label }}
-                            @if($currentSort === $col)
-                            <i class="bi bi-caret-{{ $currentDir === 'asc' ? 'up' : 'down' }}-fill"></i>
-                            @endif
-                        </a>
-                    </th>
+                        <th>{{ $label }}</th>
                     @endforeach
+
                     <th style="width: 140px;">Actions</th>
                 </tr>
             </thead>
@@ -406,6 +429,17 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const value = this.getAttribute('data-value');
+            const text = this.textContent;
+            document.getElementById('columnInput').value = value;
+            this.closest('.input-group').querySelector('.dropdown-toggle').textContent = text;
+        });
+    });
+    
     function styleSwalProgressBar() {
         const timerBar = Swal.getTimerProgressBar();
         if (timerBar) {

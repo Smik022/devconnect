@@ -187,17 +187,44 @@
 
 <div class="container py-4">
     <h1 class="mb-4 text-primary">Employers</h1>
-    <form method="GET" action="{{ route('admin_employers') }}" class="mb-3 d-flex" role="search">
+<form method="GET" action="{{ route('admin_employers') }}" class="mb-4" role="search">
+    <div class="input-group shadow-sm rounded">
+
+        @php
+            $columnNames = [
+                ''           => 'All Columns',
+                'name'       => 'Name',
+                'email'      => 'Email',
+                'created_at' => 'Registered At',
+            ];
+            $selectedColumn = request('column', '');
+        @endphp
+
+        <button class="btn btn-outline-secondary dropdown-toggle rounded-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ $columnNames[$selectedColumn] ?? 'All Columns' }}
+        </button>
+        <ul class="dropdown-menu">
+            @foreach($columnNames as $key => $label)
+                <li><a class="dropdown-item" href="#" data-value="{{ $key }}">{{ $label }}</a></li>
+            @endforeach
+        </ul>
+
+        <input type="hidden" name="column" id="columnInput" value="{{ request('column') }}">
+
         <input
-        type="search"
-        name="search"
-        value="{{ request('search') }}"
-        class="form-control me-2 border-primary"
-        placeholder="Search employers..."
-        aria-label="Search"
+            type="search"
+            name="search"
+            value="{{ request('search') }}"
+            class="form-control border-primary"
+            placeholder="Search employers..."
+            aria-label="Search"
         />
-        <button type="submit" class="btn btn-outline-primary">Search</button>
-    </form>
+
+        <button type="submit" class="btn btn-primary rounded-end d-flex align-items-center">
+            <i class="bi bi-search me-2"></i>Search
+        </button>
+    </div>
+</form>
 
     <div class="table-responsive">
         <table class="table table-striped table-hover table-bordered align-middle">
@@ -209,26 +236,12 @@
                         'email' => 'Email',
                         'created_at' => 'Joined',
                     ];
-
-                    $currentSort = request('sort', 'name');
-                    $currentDir = request('direction', 'asc');
                     @endphp
 
                     @foreach($columns as $col => $label)
-                    <th>
-                        <a href="{{ request()->fullUrlWithQuery([
-                        'sort' => $col,
-                        'direction' => ($currentSort === $col && $currentDir === 'asc') ? 'desc' : 'asc'
-                        ]) }}"
-                        class="text-decoration-none text-dark"
-                        >
-                            {{ $label }}
-                            @if($currentSort === $col)
-                            <i class="bi bi-caret-{{ $currentDir === 'asc' ? 'up' : 'down' }}-fill"></i>
-                            @endif
-                        </a>
-                    </th>
+                        <th>{{ $label }}</th>
                     @endforeach
+
                     <th style="width: 140px;">Actions</th>
                 </tr>
             </thead>
@@ -363,6 +376,15 @@
 
 <script>
     
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const value = this.getAttribute('data-value');
+            const text = this.textContent;
+            document.getElementById('columnInput').value = value;
+            this.closest('.input-group').querySelector('.dropdown-toggle').textContent = text;
+        });
+    });
     document.addEventListener('DOMContentLoaded', function () {
         function toggleError(input, errorElem, show, message = '') {
             if (show) {

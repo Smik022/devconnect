@@ -175,28 +175,27 @@
         </style>
     </head>
     <body>
+        
         <nav class="navbar navbar-inverse">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#" aria-label="DevConnect Home">
-                    <span class="glow-dev">Dev</span><span class="glow-connect">Connect</span>
+                    <a class="navbar-brand" href="/" aria-label="DevConnect Home">
+                        <span class="glow-dev">Dev</span><span class="glow-connect">Connect</span>
                     </a>
                 </div>
                 <ul class="nav navbar-nav">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="/login">Login</a></li>
-                    <li><a href="#">Register</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="/">Home</a></li>
+                    <li class="active"><a href="/admin/login">Admin Login</a></li>
+                    <li><a href="/admin/contact">Contact</a></li>
                 </ul>
                 <form class="navbar-form navbar-right" role="search" aria-label="Site search">
                     <div class="input-group">
                         <input
-                        type="text"
-                        class="form-control"
-                        placeholder="Search"
-                        name="search"
-                        aria-label="Search"
+                            type="text"
+                            class="form-control"
+                            placeholder="Search"
+                            name="search"
+                            aria-label="Search"
                         />
                         <div class="input-group-btn">
                             <button class="btn btn-default" type="submit">
@@ -207,6 +206,7 @@
                 </form>
             </div>
         </nav>
+
 
         <div class="login-container" role="main" aria-labelledby="login-heading">
             <h2 id="login-heading">Login</h2>
