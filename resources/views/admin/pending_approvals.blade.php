@@ -285,7 +285,7 @@
 
             @php
                 $columnNames = [
-                    ''             => 'All Columns',
+                    ''             => 'All',
                     'title'        => 'Title',
                     'description'  => 'Description',
                     'category'     => 'Category',
@@ -299,7 +299,7 @@
             @endphp
 
             <button class="btn btn-outline-secondary dropdown-toggle rounded-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                {{ $columnNames[$selectedColumn] ?? 'All Columns' }}
+                {{ $columnNames[$selectedColumn] ?? 'All' }}
             </button>
             <ul class="dropdown-menu">
                 @foreach($columnNames as $key => $label)
@@ -486,7 +486,17 @@
                         timer: 3000,
                         timerProgressBar: true,
                         showConfirmButton: false,
-                        didOpen: styleSwalProgressBar
+                        didOpen: () => {
+                            const timerBar = Swal.getTimerProgressBar();
+                            if (timerBar) {
+                                timerBar.style.background = '#0dcaf0';
+                                timerBar.style.boxShadow = 'none';
+                                timerBar.style.transition = 'width 0.3s ease';
+                                timerBar.style.height = '6px';
+                                timerBar.style.borderRadius = '3px';
+                                timerBar.style.marginTop = '4px';
+                            }
+                        }
                     }).then(() => location.reload());
                 })
                 .catch(err => {
@@ -538,7 +548,18 @@
                         text: data.message ?? 'The item has been rejected.',
                         timer: 3000,
                         timerProgressBar: true,
-                        showConfirmButton: false
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            const timerBar = Swal.getTimerProgressBar();
+                            if (timerBar) {
+                                timerBar.style.background = '#0dcaf0';
+                                timerBar.style.boxShadow = 'none';
+                                timerBar.style.transition = 'width 0.3s ease';
+                                timerBar.style.height = '6px';
+                                timerBar.style.borderRadius = '3px';
+                                timerBar.style.marginTop = '4px';
+                            }
+                        }
                     });
 
                     const row = button.closest('tr');

@@ -83,7 +83,7 @@
         justify-content: center; 
         align-items: center;
         white-space: nowrap;
-        padding: 0.75rem 1rem;
+        padding: 1rem 1rem;
     }    
     table tbody tr td:last-child > button,
     table tbody tr td:last-child > form > button {
@@ -225,7 +225,7 @@
             <button class="btn btn-outline-secondary dropdown-toggle rounded-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 @php
                 $columnNames = [
-                    ''             => 'All Columns',
+                    ''             => 'All',
                     'title'        => 'Title',
                     'description'  => 'Description',
                     'category'     => 'Category',
@@ -239,10 +239,10 @@
                 $selectedColumn = request('column', '');
                 @endphp
 
-                {{ $columnNames[$selectedColumn] ?? 'All Columns' }}
+                {{ $columnNames[$selectedColumn] ?? 'All' }}
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#" data-value="">All Columns</a></li>
+                <li><a class="dropdown-item" href="#" data-value="">All</a></li>
                 <li><a class="dropdown-item" href="#" data-value="title">Title</a></li>
                 <li><a class="dropdown-item" href="#" data-value="description">Description</a></li>
                 <li><a class="dropdown-item" href="#" data-value="category">Category</a></li>

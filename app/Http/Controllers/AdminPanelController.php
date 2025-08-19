@@ -78,12 +78,12 @@ class AdminPanelController extends Controller
         $routes = [
             'dashboard' => route('admin_dashboard'),
             'profile' => route('admin_profile'),
-            //'help' => route('admin_help'),
+            'help' => route('help'),
             'developers' => route('admin_developers'),
             'employers' => route('admin_employers'),
             'postings' => route('job_postings'),
-            'pending' => route('pending_approvals'),
-            //'messages' => route('admin_messages'),
+            'pendings' => route('pending_approvals'),
+            'messages' => route('admin.messages.index'),
         ];
 
         foreach ($routes as $keyword => $url) {

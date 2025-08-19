@@ -384,11 +384,11 @@
                 <a href="{{ route('pending_approvals') }}" class="{{ request()->routeIs('pending_approvals') ? 'active' : '' }}">
                     <i class="bi bi-hourglass-split"></i> Pending
                 </a>
-                <a href="#" class="{{ request()->routeIs('messages.index') ? 'active' : '' }}">
+                <a href="{{ route('admin.messages.index') }}" class="{{ request()->routeIs('admin.messages.index') ? 'active' : '' }}">
                     <i class="bi bi-chat-dots"></i> Messages
                 </a>
 
-                <a href="#" class="{{ request()->routeIs('help') ? 'active' : '' }}">
+                <a href="{{ route('help') }}" class="{{ request()->routeIs('help') ? 'active' : '' }}">
                     <i class="bi bi-question-circle"></i> Help
                 </a>
             </nav>

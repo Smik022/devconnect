@@ -230,7 +230,7 @@
 
             @php
                 $columnNames = [
-                    ''           => 'All Columns',
+                    ''           => 'All',
                     'name'       => 'Name',
                     'email'      => 'Email',
                     'bio'        => 'Bio',
@@ -243,7 +243,7 @@
             @endphp
 
             <button class="btn btn-outline-secondary dropdown-toggle rounded-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                {{ $columnNames[$selectedColumn] ?? 'All Columns' }}
+                {{ $columnNames[$selectedColumn] ?? 'All' }}
             </button>
             <ul class="dropdown-menu">
                 @foreach($columnNames as $key => $label)

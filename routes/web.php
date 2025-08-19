@@ -17,6 +17,7 @@ use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\MessageController;
 // Home Page
 Route::get('/', function () {
     return view('welcome');
@@ -143,3 +144,12 @@ Route::middleware('auth:admin')->group(function () {
     Route::delete('/admin/developers/{developer}', [DeveloperController::class, 'destroy'])->name('admin_developers.destroy');
 });
 
+Route::middleware('auth:admin')->group(function () {
+    Route::get('/admin/messages', [MessageController::class, 'index'])->name('admin.messages.index');
+    Route::post('/admin/messages', [MessageController::class, 'store'])->name('admin.messages.store');
+    Route::get('/admin/messages/fetch', [MessageController::class, 'fetchMessages'])->name('admin.messages.fetch');
+});
+
+Route::get('/admin/help', function () {
+    return view('admin.help');
+})->middleware('auth:admin')->name('help');
