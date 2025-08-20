@@ -87,7 +87,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/application/{id}/details', [App\Http\Controllers\JobPostController::class, 'showApplicationDetails'])->name('application.details');
-#developer directory search
+//developer directory search
 Route::get('/developers', [DeveloperController::class, 'index'])->name('developers.index');
 
 //Adrita

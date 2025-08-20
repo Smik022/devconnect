@@ -98,24 +98,31 @@
         </div>
     </div>
 
-    <!-- Quick Action Buttons -->
+   
     <div class="row g-4 mb-4 action-btns">
         <div class="col-md-4">
             <a href="{{ route('jobposts.create') }}" class="btn-neon w-100">
-                ➕ Create a Job Post
+                 Create a Job Post
             </a>
         </div>
         <div class="col-md-4">
             <a href="{{ route('jobposts.index') }}" class="btn-neon w-100">
-                📋 View All Job Posts
+                 View All Job Posts
             </a>
         </div>
         <div class="col-md-4">
             <a href="{{ route('employer.applications') }}" class="btn-neon w-100">
-                📝 Job Applications
+                 Job Applications
                 @if(isset($jobCount) && $jobCount > 0)
                     <span class="badge-neon ms-1">{{ $jobCount }}</span>
                 @endif
+            </a>
+        </div>
+
+        
+        <div class="col-md-4">
+            <a href="{{ route('developers.index') }}" class="btn-neon w-100">
+                 Explore Developers
             </a>
         </div>
     </div>
