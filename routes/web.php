@@ -20,6 +20,7 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TextController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\InterviewController;
+use App\Http\Controllers\NotificationController;
 
 // Home Page
 Route::get('/', function () {
@@ -171,3 +172,8 @@ Route::middleware('auth:admin')->group(function () {
 Route::get('/admin/help', function () {
     return view('admin.help');
 })->middleware('auth:admin')->name('help');
+
+//Notifications
+Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read_all');
