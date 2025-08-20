@@ -84,6 +84,13 @@
                             <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ route('interviews.index') }}">
+                                {{-- <i class="fas fa-calendar-alt me-1"></i> --}}
+                                Calendar
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('messages') }}">Messages</a>
                         </li>
                         <li class="nav-item">

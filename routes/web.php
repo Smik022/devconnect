@@ -19,6 +19,8 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TextController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\InterviewController;
+
 // Home Page
 Route::get('/', function () {
     return view('welcome');
@@ -97,6 +99,18 @@ Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
 Route::post('/tasks/{task}/update-status', [TaskController::class, 'updateStatus'])->name('tasks.updateStatus');
 Route::post('/tasks/{task}/approve', [TaskController::class, 'approveTask'])->middleware('auth');
 Route::delete('/tasks/{task}', [TaskController::class, 'deleteTask'])->middleware('auth');
+
+// scheduling
+Route::middleware('auth')->group(function () {
+  Route::get('/interviews', [\App\Http\Controllers\InterviewController::class,'index'])->name('interviews.index');
+  Route::post('/interviews', [\App\Http\Controllers\InterviewController::class,'store'])->name('interviews.store');
+  Route::patch('/interviews/{interview}/status', [\App\Http\Controllers\InterviewController::class,'updateStatus'])->name('interviews.updateStatus');
+  Route::get('/interviews/{interview}/ics', [\App\Http\Controllers\InterviewController::class,'ics'])->name('interviews.ics');
+  Route::get('/interviews/{interview}/edit', [InterviewController::class, 'edit'])->name('interviews.edit');
+  Route::put('/interviews/{interview}', [InterviewController::class, 'update'])->name('interviews.update');
+  Route::delete('/interviews/{interview}', [InterviewController::class, 'destroy'])->name('interviews.destroy');
+
+});
 
 
 //APURBO

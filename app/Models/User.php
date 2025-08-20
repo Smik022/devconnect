@@ -40,4 +40,14 @@ protected $fillable = [
     {
         return $this->hasMany(Wishlist::class);
     }
+
+    public function interviewsAsEmployer() 
+    {
+        return $this->hasMany(\App\Models\Interview::class, 'employer_id');
+    }
+
+    public function interviewsAsDeveloper() {
+        return $this->hasMany(\App\Models\Interview::class, 'developer_id');
+    }
+
 }
