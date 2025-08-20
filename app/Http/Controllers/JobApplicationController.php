@@ -6,7 +6,8 @@ use App\Models\JobPost;
 use App\Models\JobApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Notifications\NewJobApplication; // <-- keep this
+use App\Notifications\NewJobApplication;           // employer gets notified when someone applies
+use App\Notifications\ApplicationStatusUpdated;     // developer gets notified (pending/accepted/rejected/shortlisted)
 
 class JobApplicationController extends Controller
 {
@@ -34,7 +35,7 @@ class JobApplicationController extends Controller
                 ->with('error', 'You have already applied for this job.');
         }
 
-        // Create the application (unchanged behavior, but store the model in a variable)
+        // Create the application
         $application = JobApplication::create([
             'job_post_id' => $jobId,
             'user_id'     => Auth::id(),
@@ -42,10 +43,13 @@ class JobApplicationController extends Controller
             'status'      => 'pending',
         ]);
 
-        // 🔔 NEW: notify the employer who posted this job
-        // Assumes JobPost has: public function user() { return $this->belongsTo(User::class); }
-        $employer = $job->user ?? null;
-        if ($employer && $employer->id !== Auth::id()) { // don’t notify self if employer applies to own job
+        
+        $developer = Auth::user();
+        $developer->notify(new ApplicationStatusUpdated($job, $application, 'pending'));
+
+        //  Notify the employer who posted this job (don’t notify self)
+        $employer = $job->user ?? null; // requires JobPost::user() relation
+        if ($employer && $employer->id !== $developer->id) {
             $employer->notify(new NewJobApplication($job, $application));
         }
 
@@ -74,7 +78,13 @@ class JobApplicationController extends Controller
             abort(403);
         }
 
+        // Update status
         $application->update(['status' => $request->status]);
+
+        
+        $application->user->notify(
+            new ApplicationStatusUpdated($application->jobPost, $application, $request->status)
+        );
 
         return response()->json(['message' => 'Application status updated successfully']);
     }
