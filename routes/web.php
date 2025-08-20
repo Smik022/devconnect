@@ -17,6 +17,7 @@ use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TextController;
 use App\Http\Controllers\MessageController;
 // Home Page
 Route::get('/', function () {
@@ -37,6 +38,9 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 // Dashboard (Protected)
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/messages', [TextController::class, 'index'])->name('messages');
+    Route::post('/messages', [TextController::class, 'store'])->name('messages.store');
+    Route::get('/messages/fetch', [TextController::class, 'fetchMessages'])->name('messages.fetch');
     Route::get('/developer/profile', [DeveloperProfileController::class, 'edit'])->name('developer.profile.edit');
     Route::post('/developer/profile', [DeveloperProfileController::class, 'update'])->name('developer.profile.update');
 });
