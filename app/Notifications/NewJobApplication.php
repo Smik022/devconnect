@@ -17,13 +17,13 @@ class NewJobApplication extends Notification
         public JobApplication $application
     ) {}
 
-    // which channels to use (database = in-app). Add 'mail' too if you want email.
+    
     public function via($notifiable)
     {
-        return ['database']; // or ['database','mail'] if you also want email
+        return ['database']; 
     }
 
-    // what gets stored in the notifications table
+    
     public function toDatabase($notifiable): array
     {
         return [
@@ -37,7 +37,7 @@ class NewJobApplication extends Notification
         ];
     }
 
-    // OPTIONAL email (works only if mail is configured)
+    
     public function toMail($notifiable)
     {
         return (new MailMessage)
